@@ -23,23 +23,23 @@ public class GreetingTest {
     /**
      * Executed before every tests, resets the values of the Greeting objects.
      */
-    // @BeforeEach
-    // public void setUp() {
-    // usa = new Greeting(2, "USA");
-    // hawaii = new Greeting(1, "Hawaii", "Aloha");
-    // china = new Greeting(3, "China", "Ni Hao", "你好", "%%s, %s!");
+    @BeforeEach
+    public void setUp() {
+      usa = new Greeting(2, "USA");
+      hawaii = new Greeting(1, "Hawaii", "Aloha");
+      china = new Greeting(3, "China", "Ni Hao", "你好", "%%s, %s!");
     // }
 
 
     /**
      * Tests to make sure the locality ID is being returned properly.
      */
-    // @Test
-    // public void testGetLocalityID() {
-    // assertEquals(2, usa.getLocalityID());
-    // assertEquals(1, hawaii.getLocalityID());
-    // assertEquals(3, china.getLocalityID());
-    // }
+ @Test
+        public void testGetLocalityID(); {
+       assertEquals(2, usa.getLocalityID());
+       assertEquals(1, hawaii.getLocalityID());
+       assertEquals(3, china.getLocalityID());
+    }
 
     /**
      * Tests to make sure the locality name is being returned properly.
