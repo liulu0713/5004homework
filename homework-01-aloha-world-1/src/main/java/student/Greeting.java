@@ -14,11 +14,11 @@ public class Greeting {
       private String formatStr;
 
       public Greeting(int localityID, String localityName) {
-          this(localityID, localityName, greeting:"Hello");
+          this(localityID, localityName, "Hello");
       }
 
       public Greeting(int localityID, String localityName, String greeting) {
-          this.localityID, localityName, greeting, greeting, formatStr:"%s, %%s!"
+          this(localityID, localityName, greeting, greeting, "%s, %%s!");
       }
 
     /**
