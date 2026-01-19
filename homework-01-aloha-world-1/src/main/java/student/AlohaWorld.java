@@ -49,7 +49,7 @@ public final class AlohaWorld {
         Greeter greeter = new Greeter(name, locality);
         ConsoleView.printGreeting(greeter.greet());
 
-        while (!ConsoleView.checkRunAgain()) {
+        while (ConsoleView.checkRunAgain()) {
             locality = ConsoleView.getLocality();
             greeter.setLocality(locality);
             ConsoleView.printGreeting(greeter.greet());
