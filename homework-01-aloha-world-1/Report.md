@@ -27,13 +27,18 @@ classDiagram
         
     }
     class ConsoleView {
+       +displayGreeting(String message) void
         
     }
 ```
 
 ### Program Flow
 Write a short paragraph detailing the flow of the program in your own words. This is to help you understand / trace the code (and give you practice of something called a code walk that will be required in this course).
-
+The program begins with AlohaWorld in main method.
+It get the users name,and locality input.
+Using this data,Greeter created,it is responsible for providing the greeting information.
+It sent to the ConsoleView,prints the greeting to the ocnsole.
+The program ends.
 
 ## Assignment Questions
 
