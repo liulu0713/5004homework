@@ -24,6 +24,7 @@ classDiagram
         - locality : int
         + Greeter(String name)
         + getName() String
+        
     }
     class ConsoleView {
         
