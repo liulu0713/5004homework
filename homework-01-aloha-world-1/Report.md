@@ -63,16 +63,18 @@ mian is a method usually at the startinig point for a Java program.It follows by
 4. What does `toString()` do in Java? Why should any object class you create have a `toString()` method?
 
     Same as above - short answer
+toString method helps to return a string that represent of an object.it shows meaningful data like name and locality.
 
 5. What is javadoc style commenting? What is it used for? 
 
     Same as above - short answer
-
+Javadoc beigins with /** and ends with */.  using tags like @porom.
+it is use for create HTML pages to make the code readable for yourself and your team.
 
 6. Describe Test Driving Development (TDD) in your own words. 
 
     Same as above - short answer    
-
+TDD is a software development process that you write the test before you write the actual code.You start with a failing test then write just enough code to make the test pass.
 7. Go to the [Markdown Playground](MarkdownPlayground.md) and add at least 3 different markdown elements you learned about by reading the markdown resources listed in the document. Additionally you need to add a mermaid class diagram (of your choice does not have to follow the assignment. However, if you did use mermaid for the assignment, you can just copy that there). Add the elements into the markdown file, so that the formatting changes are reserved to that file. 
 
 
