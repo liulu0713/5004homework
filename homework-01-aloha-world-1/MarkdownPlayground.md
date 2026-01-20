@@ -43,24 +43,20 @@ And this is the second line.
 2. email <liu.l3@northeastern.edu>
 
 ---
-title: Aloha World UML
----
+```mermaid
 classDiagram
-direction LR
-AlohaWorld --> Greeter
-AlohaWorld --> ConsoleView : uses
-ConsoleView --> Greeter : uses
-class AlohaWorld {
-+ main(String[] args) : void
-}
-class Greeter {
-- name : String
-- locality : int
-+ Greeter(String name)
-+ getName() String
-
+    direction BT
+    class AlohaWorld {
+        +main(String[] args) void
+    }
+    class Greeter {
+        -String name
+        -int locality
+        +greet() String
     }
     class ConsoleView {
-       +displayGreeting(String message) void
-        
+        +getName() String
+        +getLocality() int
     }
+    AlohaWorld ..> Greeter : uses
+    AlohaWorld ..> ConsoleView : uses
