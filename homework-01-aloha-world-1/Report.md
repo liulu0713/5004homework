@@ -82,12 +82,12 @@ TDD is a software development process that you write the test before you write t
 
 These questions require deeper thinking of the topic. We don't expect 100% correct answers, but we encourage you to think deeply and come up with a reasonable answer. 
 
-
 1. Why would we want to keep interaction with the client contained to ConsoleView?
+   It is easy to modify if the class or settings (like Greeter class)will keep the same.
 
 
 2. Right now, the application isn't very dynamic in that it can be difficult to add new languages and greetings without modifying the code every time. Just thinking programmatically,  how could you make the application more dynamic? You are free to reference Geeting.java and how that could be used in your design.
-
+The greetings are hard coded,it is hard to add more new functions.we could move the greetung date out of the hard coded java files and into an external file.
 
 
 > [!IMPORTANT]
