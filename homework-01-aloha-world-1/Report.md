@@ -45,15 +45,20 @@ The program ends.
 1. List three additional java syntax items you didn't know when reading the code.  (make sure to use * for the list items, see example below, the backtick marks are used to write code inline with markdown)
    
    * (example) `final class`
-
+`trim()`
+`catch`
+`throw new`
 2. For each syntax additional item listed above, explain what it does in your own words and then link a resource where you figured out what it does in the references section. 
 
     * (example) The `final` keyword when used on a class prevents the class from being subclassed. This means that the class cannot be extended by another class. This is useful when you want to prevent a class from being modified or extended[^1] . It is often the standard to do this when a class only contains static methods such as driver or utility classes. Math in Java is an example of a final class[^2] .
-
+    *`trim()` is a method used on an object to remove any leading or trailing whitespace.
+    * `catch` is used in cojunction with a try block to handle exceptions that occur during the execution of program.
+    * `throw new`is used to trigger an exception.it can stop the process and signal excatly that went wrong.
 3. What does `main` do in Java? 
 
     Go ahead and answer the question as a short paragraph / few sentences. Notice the indent, this is valid because it is a list item. (erase this line before writing.)
 
+mian is a method usually at the startinig point for a Java program.It follows by the logic in the application in this method.
 
 4. What does `toString()` do in Java? Why should any object class you create have a `toString()` method?
 
