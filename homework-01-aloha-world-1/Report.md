@@ -40,6 +40,8 @@ Using this data,Greeter created,it is responsible for providing the greeting inf
 It sent to the ConsoleView,prints the greeting to the ocnsole.
 The program ends.
 
+The program starts in AlohaWorld.main. First, it uses ConsoleView to ask the user for their name and locality. Then AlohaWorld creates a Greeter object using those inputs. The Greeter builds the greeting message (for example, using the name and locality), and the result is sent back to ConsoleView to print out. After printing the greeting, the program finishes and exits.
+
 ## Assignment Questions
 
 1. List three additional java syntax items you didn't know when reading the code.  (make sure to use * for the list items, see example below, the backtick marks are used to write code inline with markdown)
@@ -64,18 +66,19 @@ mian is a method usually at the startinig point for a Java program.It follows by
 
     Same as above - short answer
 toString method helps to return a string that represent of an object.it shows meaningful data like name and locality.
+toString()returns a string representation of an object. 
 
-5. What is javadoc style commenting? What is it used for? 
+6. What is javadoc style commenting? What is it used for? 
 
     Same as above - short answer
 Javadoc beigins with /** and ends with */.  using tags like @porom.
 it is use for create HTML pages to make the code readable for yourself and your team.
 
-6. Describe Test Driving Development (TDD) in your own words. 
+7. Describe Test Driving Development (TDD) in your own words. 
 
     Same as above - short answer    
 TDD is a software development process that you write the test before you write the actual code.You start with a failing test then write just enough code to make the test pass.
-7. Go to the [Markdown Playground](MarkdownPlayground.md) and add at least 3 different markdown elements you learned about by reading the markdown resources listed in the document. Additionally you need to add a mermaid class diagram (of your choice does not have to follow the assignment. However, if you did use mermaid for the assignment, you can just copy that there). Add the elements into the markdown file, so that the formatting changes are reserved to that file. 
+8. Go to the [Markdown Playground](MarkdownPlayground.md) and add at least 3 different markdown elements you learned about by reading the markdown resources listed in the document. Additionally you need to add a mermaid class diagram (of your choice does not have to follow the assignment. However, if you did use mermaid for the assignment, you can just copy that there). Add the elements into the markdown file, so that the formatting changes are reserved to that file. 
 
 
 ## Deeper Thinking Questions
