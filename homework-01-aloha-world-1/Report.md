@@ -47,9 +47,9 @@ The program starts in AlohaWorld.main. First, it uses ConsoleView to ask the use
 1. List three additional java syntax items you didn't know when reading the code.  (make sure to use * for the list items, see example below, the backtick marks are used to write code inline with markdown)
    
    * (example) `final class`
-`trim()`
-`catch`
-`throw new`
+*`trim()`
+*`catch`
+*`throw new`
 2. For each syntax additional item listed above, explain what it does in your own words and then link a resource where you figured out what it does in the references section. 
 
     * (example) The `final` keyword when used on a class prevents the class from being subclassed. This means that the class cannot be extended by another class. This is useful when you want to prevent a class from being modified or extended[^1] . It is often the standard to do this when a class only contains static methods such as driver or utility classes. Math in Java is an example of a final class[^2] .
@@ -64,20 +64,19 @@ mian is a method usually at the startinig point for a Java program.It follows by
 
 4. What does `toString()` do in Java? Why should any object class you create have a `toString()` method?
 
-    Same as above - short answer
+   
 toString method helps to return a string that represent of an object.it shows meaningful data like name and locality.
 toString()returns a string representation of an object. 
 
 6. What is javadoc style commenting? What is it used for? 
 
-    Same as above - short answer
-Javadoc beigins with /** and ends with */.  using tags like @porom.
+   
+Javadoc beigins with /** and ends with */. 
 it is use for create HTML pages to make the code readable for yourself and your team.
 
 7. Describe Test Driving Development (TDD) in your own words. 
 
-    Same as above - short answer    
-TDD is a software development process that you write the test before you write the actual code.You start with a failing test then write just enough code to make the test pass.
+TDD means writing tests before writing the actual code. First, the test fails. Then you write code until the test passes. After that, you can improve the code without breaking the test. This helps reduce errors and makes the program more reliable.
 8. Go to the [Markdown Playground](MarkdownPlayground.md) and add at least 3 different markdown elements you learned about by reading the markdown resources listed in the document. Additionally you need to add a mermaid class diagram (of your choice does not have to follow the assignment. However, if you did use mermaid for the assignment, you can just copy that there). Add the elements into the markdown file, so that the formatting changes are reserved to that file. 
 
 
