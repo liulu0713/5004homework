@@ -51,13 +51,12 @@ public class GameListTest {
     void testAddByNamePriority() {
         Stream<BoardGame> filtered = Stream.of(azul, catan);
 
-        gameList.addToList("catan", filtered); // 忽略大小写
+        gameList.addToList("catan", filtered);
         assertEquals(List.of("Catan"), gameList.getGameNames());
     }
 
     @Test
     void testAddByIndexAndRange() {
-        // 过滤列表按名字排序应该是：Azul, Brass, Catan, Pandemic
         List<BoardGame> filteredList = List.of(pandemic, catan, brass, azul);
 
         gameList.addToList("1", filteredList.stream()); // add Azul

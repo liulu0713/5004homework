@@ -9,9 +9,18 @@ import java.util.Collections;
 
 
 public class Planner implements IPlanner {
+    /** All games loaded into the planner (never changes). */
     private final List<BoardGame> allGames;
+
+    /** Current working set after progressive filters are applied. */
     private List<BoardGame> currentGames;
 
+    /**
+     * Constructs a planner with the full board game collection.
+     *
+     * @param games the full collection of board games
+     * @throws IllegalArgumentException if games is null
+     */
     public Planner(Set<BoardGame> games) {
         if (games == null) {
             throw new IllegalArgumentException("games is null");
@@ -37,7 +46,9 @@ public class Planner implements IPlanner {
 
     private String[] splitByOperator(String cond, String opToken) {
         int idx = cond.indexOf(opToken);
-        if (idx < 0) throw new IllegalArgumentException("Invalid filter: " + cond);
+        if (idx < 0) {
+            throw new IllegalArgumentException("Invalid filter: " + cond);
+        }
 
         String left = cond.substring(0, idx);
         String right = cond.substring(idx + opToken.length());
@@ -48,32 +59,72 @@ public class Planner implements IPlanner {
         return new String[]{left, right};
     }
 
+    /**
+     * Supported operations for filtering.
+     */
     private enum Operation {
+        /** Greater than or equal to (>=). */
         GREATER_EQ(">="),
+        /** Less than or equal to (<=). */
         LESS_EQ("<="),
+        /** Not equal to (!=). */
         NOT_EQUALS("!="),
+        /** Equal to (==). */
         EQUALS("=="),
+        /** Contains (~=). */
         CONTAINS("~="),
+        /** Greater than (>). */
         GREATER(">"),
+        /** Less than (<). */
         LESS("<");
 
-        final String token;
+        /** Operator token used in filter strings. */
+        private final String token;
 
+        /**
+         * Constructs an operation.
+         *
+         * @param token operator token
+         */
         Operation(String token) {
             this.token = token;
         }
 
-        static Operation fromString(String s) {
-            if (s.contains(">=")) return GREATER_EQ;
-            if (s.contains("<=")) return LESS_EQ;
-            if (s.contains("!=")) return NOT_EQUALS;
-            if (s.contains("==")) return EQUALS;
-            if (s.contains("~=")) return CONTAINS;
-            if (s.contains(">")) return GREATER;
-            if (s.contains("<")) return LESS;
+        /**
+         * Returns the operator token.
+         *
+         * @return operator token
+         */
+        public String getToken() {
+            return token;
+        }
+
+        /**
+         * Parses an operation from a condition string.
+         *
+         * @param s condition string
+         * @return matching operation
+         */
+        public static Operation fromString(String s) {
+            if (s.contains(">=")) {
+                return GREATER_EQ;
+            } else if (s.contains("<=")) {
+                return LESS_EQ;
+            } else if (s.contains("!=")) {
+                return NOT_EQUALS;
+            } else if (s.contains("==")) {
+                return EQUALS;
+            } else if (s.contains("~=")) {
+                return CONTAINS;
+            } else if (s.contains(">")) {
+                return GREATER;
+            } else if (s.contains("<")) {
+                return LESS;
+            }
             throw new IllegalArgumentException("No operator found in: " + s);
         }
     }
+
 
     private double getNumericValue(BoardGame g, GameData col) {
         switch (col) {
@@ -116,7 +167,9 @@ public class Planner implements IPlanner {
 
         for (String raw : parts) {
             String cond = removeSpaces(raw);
-            if (cond.isEmpty()) continue;
+            if (cond.isEmpty()) {
+                continue;
+            }
             Operation op = Operation.fromString(cond);
             String[] lr = splitByOperator(cond, op.token);
             String left = lr[0];
@@ -159,25 +212,22 @@ public class Planner implements IPlanner {
 
     private boolean matches(BoardGame g, GameData col, Operation op, String rightRaw) {
         if (col == GameData.NAME) {
-            String left = g.getName();
-            String right = rightRaw;
+            String left = (g.getName() == null) ? "" : g.getName().toLowerCase();
+            String right = (rightRaw == null) ? "" : rightRaw.toLowerCase();
 
-            if (left == null) left = "";
-            if (right == null) right = "";
-
-            left = left.toLowerCase();
-            right = right.toLowerCase();
-
-            switch (op) {
-                case CONTAINS:
-                    return left.contains(right);
-                case EQUALS:
-                    return left.equals(right);
-                case NOT_EQUALS:
-                    return !left.equals(right);
-                default:
-                    throw new IllegalArgumentException("Operator " + op + " not valid for NAME");
+            if (op == Operation.CONTAINS) {
+                // allow both: "go fish" and "gofish"
+                if (left.contains(right)) {
+                    return true;
+                }
+                String leftNoSpace = left.replace(" ", "");
+                String rightNoSpace = right.replace(" ", "");
+                return leftNoSpace.contains(rightNoSpace);
             }
+            if (op == Operation.EQUALS) {
+                return left.equals(right);
+            }
+            return !left.equals(right); // NOT_EQUALS
         }
 
         double leftNum = getNumericValue(g, col);

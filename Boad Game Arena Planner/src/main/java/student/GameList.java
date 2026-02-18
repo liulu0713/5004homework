@@ -1,15 +1,10 @@
 package student;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class GameList implements IGameList {
-
+    /** Stores the selected games with no duplicates. */
     private final Set<BoardGame> games;
 
     /**
@@ -41,21 +36,37 @@ public class GameList implements IGameList {
 
     @Override
     public void saveGame(String filename) {
-        if (filename == null || filename.trim().isEmpty()) {
-            throw new UnsupportedOperationException("filename is null/empty");
+        if (filename == null) {
+            throw new IllegalArgumentException("filename is null");
+        }
+        String f = filename.trim();
+        if (f.isEmpty()) {
+            throw new IllegalArgumentException("filename is empty");
         }
 
-        List<String> namelist = getGameNames();
+        // get sorted names
+        List<String> names = getGameNames();
+
         try {
-            FileWriter writer = new FileWriter(filename);
-            for (String name : namelist) {
-                writer.write(name + "\n");
+            java.nio.file.Path path = java.nio.file.Paths.get(f);
+            java.nio.file.Path parent = path.getParent();
+
+            // ✅ create folder like "temp/" if needed
+            if (parent != null) {
+                java.nio.file.Files.createDirectories(parent);
             }
-            writer.close();
-        } catch (IOException e) {
+
+            // ✅ overwrite file (default behavior)
+            java.nio.file.Files.write(path, names,
+                    java.nio.charset.StandardCharsets.UTF_8,
+                    java.nio.file.StandardOpenOption.CREATE,
+                    java.nio.file.StandardOpenOption.TRUNCATE_EXISTING);
+
+        } catch (Exception e) {
             throw new RuntimeException("Could not save to file:" + filename, e);
         }
     }
+
 
     private void sortBoardGames(List<BoardGame> list) {
 
@@ -78,11 +89,17 @@ public class GameList implements IGameList {
 
     @Override
     public void addToList(String str, Stream<BoardGame> filtered) throws IllegalArgumentException {
-        if (str == null) throw new IllegalArgumentException("str is null");
-        if (filtered == null) throw new IllegalArgumentException("filtered is null");
+        if (str == null) {
+            throw new IllegalArgumentException("str is null");
+        }
+        if (filtered == null) {
+            throw new IllegalArgumentException("filtered is null");
+        }
 
         String input = str.trim();
-        if (input.isEmpty()) throw new IllegalArgumentException("empty input");
+        if (input.isEmpty()) {
+            throw new IllegalArgumentException("empty input");
+        }
 
         // Stream 只能用一次，先转成 List
         List<BoardGame> filteredList = new ArrayList<>();
@@ -98,9 +115,7 @@ public class GameList implements IGameList {
             for (BoardGame game : filteredList) {
                 games.add(game);
             }
-        }
-        // 2) 单个数字
-        else if (input.matches("\\d+")) {
+        } else if (input.matches("\\d+")) {
             int index = Integer.parseInt(input);
 
             if (index < 1 || index > filteredList.size()) {
@@ -108,9 +123,7 @@ public class GameList implements IGameList {
             }
 
             games.add(filteredList.get(index - 1));
-        }
-        // 3) 范围 1-5（允许空格）
-        else if (input.matches("\\d+\\s*-\\s*\\d+")) {
+        } else if (input.matches("\\d+\\s*-\\s*\\d+")) {
             String[] parts = input.split("-");
             int start = Integer.parseInt(parts[0].trim());
             int end = Integer.parseInt(parts[1].trim());
@@ -122,9 +135,7 @@ public class GameList implements IGameList {
             for (int i = start - 1; i <= end - 1; i++) {
                 games.add(filteredList.get(i));
             }
-        }
-        // 4) 名字（优先级：如果不是数字/范围/all，就按名字）
-        else {
+        } else {
             boolean found = false;
 
             for (BoardGame g : filteredList) {
@@ -148,10 +159,14 @@ public class GameList implements IGameList {
     @Override
     public void removeFromList(String str) throws IllegalArgumentException {
 
-        if (str == null) throw new IllegalArgumentException("str is null");
+        if (str == null) {
+            throw new IllegalArgumentException("str is null");
+        }
 
         String input = str.trim();
-        if (input.isEmpty()) throw new IllegalArgumentException("empty input");
+        if (input.isEmpty()) {
+            throw new IllegalArgumentException("empty input");
+        }
 
         int beforeSize = games.size();
 
@@ -161,11 +176,9 @@ public class GameList implements IGameList {
             return;
         }
 
-        // 当前 games 转成 list，并按名字排序（用于数字/范围索引）
         List<BoardGame> currentList = new ArrayList<>(games);
         sortBoardGames(currentList);
 
-        // 1) 单个数字
         if (input.matches("\\d+")) {
 
             int index = Integer.parseInt(input);
@@ -175,11 +188,7 @@ public class GameList implements IGameList {
             }
 
             games.remove(currentList.get(index - 1));
-        }
-
-        // 2) 范围（允许空格：1 - 5）
-        else if (input.matches("\\d+\\s*-\\s*\\d+")) {
-
+        } else if (input.matches("\\d+\\s*-\\s*\\d+")) {
             String[] parts = input.split("-");
             int start = Integer.parseInt(parts[0].trim());
             int end = Integer.parseInt(parts[1].trim());
@@ -188,14 +197,10 @@ public class GameList implements IGameList {
                 throw new IllegalArgumentException("range out of range");
             }
 
-            // 删除时建议从后往前删（更安全）
             for (int i = end - 1; i >= start - 1; i--) {
                 games.remove(currentList.get(i));
             }
-        }
-
-        // 3) 名字
-        else {
+        } else {
             boolean found = false;
 
             for (BoardGame g : currentList) {
@@ -210,8 +215,6 @@ public class GameList implements IGameList {
                 throw new IllegalArgumentException("No game named: " + input);
             }
         }
-
-        // 如果没有任何变化（比如移除不存在/重复操作），按要求抛异常
         if (games.size() == beforeSize) {
             throw new IllegalArgumentException("No games removed for: " + input);
         }
