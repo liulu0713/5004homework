@@ -39,9 +39,6 @@ public class Planner implements IPlanner {
         return filter(filter, sortOn, true);
     }
 
-    private String removeSpaces(String s) {
-        return s.replaceAll("\\s+", "");
-    }
 
 
     private String[] splitByOperator(String cond, String opToken) {
@@ -53,7 +50,8 @@ public class Planner implements IPlanner {
         String left = cond.substring(0, idx);
         String right = cond.substring(idx + opToken.length());
 
-        if (left.isEmpty() || right.isEmpty()) {
+        if (left.trim().isEmpty() || right.trim().isEmpty()) {
+
             throw new IllegalArgumentException("Invalid filter: " + cond);
         }
         return new String[]{left, right};
@@ -165,15 +163,26 @@ public class Planner implements IPlanner {
         String[] parts = f.split(",");
         List<BoardGame> result = new ArrayList<>(currentGames);
 
+
+//        for (String raw : parts) {
+//            String cond = removeSpaces(raw);
+//            if (cond.isEmpty()) {
+//                continue;
+//            }
+//            Operation op = Operation.fromString(cond);
+//            String[] lr = splitByOperator(cond, op.token);
+//            String left = lr[0];
+//            String right = lr[1];
         for (String raw : parts) {
-            String cond = removeSpaces(raw);
+            String cond = raw.trim();
             if (cond.isEmpty()) {
                 continue;
             }
             Operation op = Operation.fromString(cond);
-            String[] lr = splitByOperator(cond, op.token);
-            String left = lr[0];
-            String right = lr[1];
+            String[] lr = splitByOperator(cond, op.getToken());
+            String left = lr[0].trim();
+            String right = lr[1].trim();
+
 
             GameData col = GameData.fromString(left);
             if (col == null) {
@@ -212,23 +221,43 @@ public class Planner implements IPlanner {
 
     private boolean matches(BoardGame g, GameData col, Operation op, String rightRaw) {
         if (col == GameData.NAME) {
-            String left = (g.getName() == null) ? "" : g.getName().toLowerCase();
-            String right = (rightRaw == null) ? "" : rightRaw.toLowerCase();
+            String nameValue = (g.getName() == null) ? "" : g.getName().toLowerCase();
+            String filterValue = (rightRaw == null) ? "" : rightRaw.toLowerCase();
 
             if (op == Operation.CONTAINS) {
-                // allow both: "go fish" and "gofish"
-                if (left.contains(right)) {
+                if (nameValue.contains(filterValue)) {
                     return true;
                 }
-                String leftNoSpace = left.replace(" ", "");
-                String rightNoSpace = right.replace(" ", "");
-                return leftNoSpace.contains(rightNoSpace);
+                String nameNoSpace = nameValue.replace(" ", "");
+                String filterNoSpace = filterValue.replace(" ", "");
+                return nameNoSpace.contains(filterNoSpace);
+
+            } else if (op == Operation.EQUALS) {
+                return nameValue.equals(filterValue);
+
+            } else if (op == Operation.NOT_EQUALS) {
+                return !nameValue.equals(filterValue);
+
+            } else if (op == Operation.GREATER || op == Operation.GREATER_EQ
+                    || op == Operation.LESS || op == Operation.LESS_EQ) {
+
+                int cmp = nameValue.compareTo(filterValue);
+
+                if (op == Operation.GREATER) {
+                    return cmp > 0;
+                } else if (op == Operation.GREATER_EQ) {
+                    return cmp >= 0;
+                } else if (op == Operation.LESS) {
+                    return cmp < 0;
+                } else { // LESS_EQ
+                    return cmp <= 0;
+                }
+            } else {
+                throw new IllegalArgumentException("Invalid operator for name: " + op);
             }
-            if (op == Operation.EQUALS) {
-                return left.equals(right);
-            }
-            return !left.equals(right); // NOT_EQUALS
         }
+
+
 
         double leftNum = getNumericValue(g, col);
 
@@ -253,9 +282,8 @@ public class Planner implements IPlanner {
             case NOT_EQUALS:
                 return leftNum != rightNum;
             case CONTAINS:
-                throw new IllegalArgumentException("Operator ~= not valid for numeric columns");
             default:
-                throw new IllegalArgumentException("Unknown operator: " + op);
+                throw new IllegalArgumentException("Invalid operator for numeric column: " + op);
         }
     }
 
