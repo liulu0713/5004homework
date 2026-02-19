@@ -1,28 +1,15 @@
 package student;
 
-import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.LinkedList;
 
 /**
  * Main driver for the PayrollGenerator program.
- * 
+ *
  * Students, you are free to modify this file as needed, but you need to leave in the parts where we
  * can pass in the employee and payroll files as arguments.
- * 
- * Grading wise, we will both be using unit tests, and running your program with different employee
- * files. We also will create a separate output file for each.
- * 
- * 
- * To run the program, you can use the following command:
- * 
- * java student.PayrollGenerator -e employees_mine.csv -t time_cards.csv -o pay_stubs_mine.csv or
- * java student.PayrollGenerator The above defaults listed below.
- * 
- * We also suggest meeting with a TA and learning how to add command line arguments
- * in your IDE, as it will make testing and debugging easier.
- **/
+ */
 public final class PayrollGenerator {
     /** default file name for employees. */
     private static final String DEFAULT_EMPLOYEE_FILE = "resources/employees.csv";
@@ -31,132 +18,101 @@ public final class PayrollGenerator {
     /** default time card file name. */
     private static final String DEFAULT_TIME_CARD_FILE = "resources/time_cards.csv";
 
-
-    /**
-     * private constructor to prevent instantiation.
-     */
+    /** Private constructor to prevent instantiation. */
     private PayrollGenerator() {
-
     }
 
     /**
      * Main driver for the program.
-     * 
+     *
      * @param args command line arguments
      */
     public static void main(String[] args) {
-        Arguments arguments = Arguments.process(args); // leave this, and make sure you use it on
-                                                       // reading/writing files!
-
-        // you are free to modify this code, or use it as a basis for your code
-        // depends on how you want to implement the program
+        Arguments arguments = Arguments.process(args);
 
         List<String> employeeLines = FileUtil.readFileToList(arguments.getEmployeeFile());
         List<String> timeCards = FileUtil.readFileToList(arguments.getTimeCards());
 
-        List<IEmployee> employees = employeeLines.stream().map(Builder::buildEmployeeFromCSV)
+        List<IEmployee> employees = employeeLines.stream()
+                .map(Builder::buildEmployeeFromCSV)
+                .filter(e -> e != null)
                 .collect(Collectors.toList());
 
-        List<ITimeCard> timeCardList = timeCards.stream().map(Builder::buildTimeCardFromCSV)
+        List<ITimeCard> timeCardList = timeCards.stream()
+                .map(Builder::buildTimeCardFromCSV)
+                .filter(c -> c != null)
                 .collect(Collectors.toList());
 
         List<IPayStub> payStubs = new LinkedList<>();
 
+        for (ITimeCard card : timeCardList) {
+            String cardId = card.getEmployeeID();
+            if (cardId == null) {
+                continue;
+            }
+            cardId = cardId.trim();
 
-        // now we suggest looping through the timeCardList and for each timecard, find
-        // the matching employee and generate a new paystub object. Then add that paystub
-        // to the payStubs list. - remember, you can use the employee ID to match the employee
-        // to the time card. Also remember if the value is negative, you just skip that payStub
-        // as it is invalid, but if is 0, you still generate a paystub, but the amount is 0.
+            IEmployee currentEmployee = null;
+            for (IEmployee emp : employees) {
+                String empId = emp.getID();
+                if (empId != null && empId.trim().equals(cardId)) {
+                    currentEmployee = emp;
+                    break;
+                }
+            }
 
-        //YOUR CODE HERE
-      for(ITimeCard card : timeCardList) {
-          IEmployee currentEmployee = null;
-          for(IEmployee emp : employees){
-              if (emp.getID().equals(card.getEmployeeID())){
-                  currentEmployee = emp;
-                  break;
-              }
-          }
+            if (currentEmployee != null) {
+                IPayStub stub = currentEmployee.runPayroll(card.getHoursWorked());
+                if (stub != null) {
+                    payStubs.add(stub);
+                }
+            }
+        }
 
-          if (currentEmployee != null){
-              IPayStub stub = currentEmployee.runPayroll(card.getHoursWorked());
+        List<String> newEmployeeLines = employees.stream()
+                .map(IEmployee::toCSV)
+                .collect(Collectors.toList());
+        newEmployeeLines.add(0, FileUtil.EMPLOYEE_HEADER);
+        FileUtil.writeFile(arguments.getEmployeeFile(), newEmployeeLines);
 
-              if (stub != null) {
-                  payStubs.add(stub);
-              }
-          }
-      }
-
-         // now save out employees to a new file
-
-         employeeLines = employees.stream().map(IEmployee::toCSV).collect(Collectors.toList());
-         employeeLines.add(0, FileUtil.EMPLOYEE_HEADER);
-         FileUtil.writeFile(arguments.getEmployeeFile(), employeeLines);
- 
-         // now save out the pay stubs
-         List<String> payStubLines = payStubs.stream().filter(x -> x != null).map(IPayStub::toCSV)
-                 .collect(Collectors.toList());
-         payStubLines.add(0, FileUtil.PAY_STUB_HEADER);
-         FileUtil.writeFile(arguments.getPayrollFile(), payStubLines);
-
+        List<String> payStubLines = payStubs.stream()
+                .map(IPayStub::toCSV)
+                .collect(Collectors.toList());
+        payStubLines.add(0, FileUtil.PAY_STUB_HEADER);
+        FileUtil.writeFile(arguments.getPayrollFile(), payStubLines);
     }
 
-
     /**
-     * This is an internal class. Please leave it as is/do not modify! This design is common for
-     * processing arguments if you want to make sure it is unique to the driver.
+     * This is an internal class. Please leave it as is/do not modify!
      */
     private static final class Arguments {
         /** sets the employeeFile argument. */
         private String employeeFile = DEFAULT_EMPLOYEE_FILE;
-
         /** sets the payrollFile argument. */
         private String payrollFile = DEFAULT_PAYROLL_FILE;
-
         /** sets the timeCards argument. */
         private String timeCards = DEFAULT_TIME_CARD_FILE;
 
-
-        /**
-         * Constructor for Arguments. Setup as private, so builder has to be used.
-         * 
-         * @see #process(String[])
-         */
+        /** Constructor for Arguments. */
         private Arguments() {
-
         }
 
-        /**
-         * Gets the employee file.
-         * 
-         * @return the name of the employee file
-         */
+        /** @return the name of the employee file */
         public String getEmployeeFile() {
             return employeeFile;
         }
 
-        /**
-         * Gets the payroll file.
-         * 
-         * @return the name of the payroll file
-         */
+        /** @return the name of the payroll file */
         public String getPayrollFile() {
             return payrollFile;
         }
 
-        /**
-         * Gets the time card file.
-         * 
-         * @return the name of the time card file
-         */
+        /** @return the name of the time card file */
         public String getTimeCards() {
             return timeCards;
         }
 
-        /**
-         * Prints the help message.
-         */
+        /** Prints the help message. */
         public void printHelp() {
             System.out.println(
                     "Usage: java student.PayrollGenerator [-e employee_file] [-t time_cards_file] [-o payroll_file]");
@@ -172,7 +128,7 @@ public final class PayrollGenerator {
 
         /**
          * Processes the arguments.
-         * 
+         *
          * @param args the arguments
          * @return an Argument object with file names added
          */
@@ -215,5 +171,4 @@ public final class PayrollGenerator {
             return arguments;
         }
     }
-
 }

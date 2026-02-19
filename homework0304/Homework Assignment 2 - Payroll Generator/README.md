@@ -1,8 +1,9 @@
-Name:
+Name:Lu Liu
+https://github.com/liulu0713/5004homework
 
 How many hours did it take you to complete this assignment (estimate)?
 
-20 hours
+40 hours
 
 Did you collaborate with any other students/TAs/Professors? If so, tell us who and in what
 capacity.
