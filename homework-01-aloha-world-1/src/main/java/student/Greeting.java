@@ -1,7 +1,8 @@
 package student;
 
 /**
- * This class is a place holder which you will fully implement based on the javadoc
+ * Greeting stores a locality ID,locality name,and greeting text.
+ * A format sring describing where the greeting and name go.
  * 
  * https://cs5004-khoury-lionelle.github.io/hello_world/student/package-summary.html
  * 
@@ -11,7 +12,9 @@ public class Greeting {
       private String localityName;
       private String asciiGreeting;
       private String unicodeGreeting;
-      private String formatStr;
+
+
+      private final String formatStr;
 
       public Greeting(int localityID, String localityName) {
           this(localityID, localityName, "Hello");
@@ -37,10 +40,36 @@ public class Greeting {
           this.unicodeGreeting = unicodeGreeting;
           this.formatStr = formatStr;
       }
+    /** Returns the locality id number. */
       public int getLocalityID() {
           return this.localityID;
       }
-      public static  void main(String[ ] args){
-
+      public String getLocalityName() {
+        return localityName;
       }
+
+      public String getAsciiGreeting() {
+        return asciiGreeting;
+      }
+
+      public String getUnicodeGreeting() {
+        return unicodeGreeting;
+      }
+      /** return unicode format. */
+      public String getFormatStr() {
+        return getFormatStr(false);
+      }
+      public String getFormatStr(boolean asciiOnly) {
+        String greet = asciiOnly ? asciiGreeting : unicodeGreeting;
+        // greeting fill with formatStr，leave a space %s for name
+        // formatStr="%s, %%s!"，greet="Hello" -> "Hello, %s!"
+        return String.format(formatStr, greet);
+    }
+    @Override
+    public String toString() {
+        return String.format(
+                "{localityID:%d, localityName:\"%s\", asciiGreeting:\"%s\", unicodeGreeting:\"%s\"}",
+                localityID, localityName, asciiGreeting, unicodeGreeting
+        );
+    }
 }

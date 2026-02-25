@@ -189,7 +189,7 @@ public class Greeter {
      * @return the locality as a string
      */
     private String getLocalityString() {
-        if (locality < 1 || locality >= localityList.size()) {
+        if (locality < 1 || locality > localityList.size()) {
             return "USA";
         }
         return localityList.get(locality - 1);
