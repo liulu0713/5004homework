@@ -10,7 +10,7 @@ If you are using mermaid markup to generate your class diagrams, you may edit th
 
 Include a UML class diagram of your initial design for this assignment. If you are using the mermaid markdown, you may include the code for it here. For a reminder on the mermaid syntax, you may go [here](https://mermaid.js.org/syntax/classDiagram.html)
 ```mermaid 
-### Provided Code
+
 classDiagram
 direction LR
 
@@ -47,7 +47,7 @@ class BoardGame {
 +boolean equals(Object obj)
 +int hashCode()
 }
-lass GameData {
+class GameData {
 <<enum>>
 NAME
 ID
