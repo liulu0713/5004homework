@@ -27,7 +27,7 @@ class IGameList {
    +void removeFromList(String str)
 }
 class IPlanner {
-<<interface>>
+   <<interface>>
    +Stream~BoardGame~ filter(String filter)
    +Stream~BoardGame~ filter(String filter, GameData sortOn)
    +Stream~BoardGame~ filter(String filter, GameData sortOn, boolean ascending)
@@ -57,13 +57,14 @@ class GameData {
 
 class GameList
 class Planner
-
    IGameList <|.. GameList
    IPlanner  <|.. Planner
    Planner --> BoardGame : filters/sorts
    GameList --> BoardGame : stores
    Planner --> GameData : parses/sorts
    BoardGame --> GameData : toStringWithInfo
+ ```  
+   
    Provide a class diagram for the provided code as you read through it.  For the classes you are adding, you will create them as a separate diagram, so for now, you can just point towards the interfaces for the provided code diagram.
 
 
@@ -125,7 +126,7 @@ Planner --> GameData : uses
 GameList --> BoardGame : stores
 Planner --> BoardGame : filters/sorts
 
-
+```
 
 
 ## (INITIAL DESIGN): Tests to Write - Brainstorm
