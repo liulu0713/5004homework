@@ -57,7 +57,9 @@ public class ArgsController {
                 case "-f":
                     if (i + 1 < args.length) {
                         Formats f = Formats.containsValues(args[++i]);
-                        if (f != null) format = f;
+                        if (f != null) {
+                            format = f;
+                        }
                     }
                     break;
 
