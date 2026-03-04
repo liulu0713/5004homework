@@ -38,7 +38,7 @@ public class ArgsController {
     private String dataPath = DomainNameModel.DATABASE;
 
     /**
-     * Parses the given command line arguments and runs the program.
+     * Parses the given command line arguments and runs the program
      *
      * <p>If {@code -h} or {@code --help} is present, the help message is printed
      * and the method returns immediately without querying the model.

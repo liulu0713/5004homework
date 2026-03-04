@@ -42,7 +42,6 @@ public abstract class AbstractEmployee implements IEmployee {
         if (hoursWorked < 0) {
             return null;
         }
-
         BigDecimal grossPay = calculateGrossPay(hoursWorked);
         BigDecimal pretax = BigDecimal.valueOf(pretaxDeductions);
         BigDecimal taxablePay = grossPay.subtract(pretax);

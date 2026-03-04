@@ -1,3 +1,5 @@
+package student; // This allows access to protected methods
+
 import org.junit.jupiter.api.Test;
 import student.SalaryEmployee;
 
@@ -43,5 +45,41 @@ public class SalaryEmployeeTest {
 
         // Assert
         assertEquals(expected, actual);
+    }
+
+
+    /**
+     * Reproduces the 1000.0 vs 100.0 error.
+     * This tests if the constructor correctly passes the salary to the super class.
+     */
+    @Test
+    public void testSalaryConstructor() {
+        // We pass 1000.0 as the annual salary (payRate)
+        double inputSalary = 1000.0;
+        SalaryEmployee emp = new SalaryEmployee("Jane Doe", "54321", 20, 1000, 100, 0);
+
+        // This is likely where the "expected 1000.0 but was 100.0" is happening
+        assertEquals(1000.0, emp.getYTDEarnings(), 0.01,
+                "The pay rate returned by the getter should match the input to the constructor");
+    }
+
+    /*
+
+    * SALARY,Nami,s193,200000,1000,17017,4983
+    * */
+    @Test
+    public void reproduceAssertionError() {
+        // Based on your debug: Salary is 100000.0
+        // Based on employees.csv: Edward Elric has 100000 salary and 250 deduction
+        SalaryEmployee emp = new SalaryEmployee("Edward Elric", "f103", 100000.0, 250.0, 11000.0, 2333.0);
+
+        // Test 1: Check if PayRate is stored correctly in the super class
+        // If this returns 100.0, your constructor arguments are likely swapped.
+        assertEquals(100000.0, emp.getPayRate(), 0.001, "PayRate should be 100000.0");
+
+        // Test 2: Check Gross Pay Calculation
+        // 100000 / 24 = 4166.67
+        BigDecimal expectedGross = new BigDecimal("4166.67");
+        assertEquals(expectedGross, emp.calculateGrossPay(0.0), "Gross pay calculation mismatch");
     }
 }

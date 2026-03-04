@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="student.SalaryEmployeeTest" tests="1" skipped="0" failures="1" errors="0" timestamp="2026-02-25T07:57:34.376Z" hostname="primbos-MacBook-Pro.local" time="0.022">
+  <properties/>
+  <testcase name="testSalaryConstructor()" classname="student.SalaryEmployeeTest" time="0.015">
+    <failure message="org.opentest4j.AssertionFailedError: The pay rate returned by the getter should match the input to the constructor ==&gt; expected: &lt;1000.0&gt; but was: &lt;100.0&gt;" type="org.opentest4j.AssertionFailedError">org.opentest4j.AssertionFailedError: The pay rate returned by the getter should match the input to the constructor ==&gt; expected: &lt;1000.0&gt; but was: &lt;100.0&gt;
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+	at org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:197)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:86)
+	at org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:1024)
+	at student.SalaryEmployeeTest.testSalaryConstructor(SalaryEmployeeTest.java:62)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+</failure>
+  </testcase>
+  <system-out><![CDATA[DEBUG [AbstractEmployee]: payRate now returns = 20.0
+DEBUG [AbstractEmployee]: name now returns = Jane Doe
+DEBUG [AbstractEmployee]: id now returns = 54321
+DEBUG [AbstractEmployee]: pretaxDeductions now returns = 1000.0
+DEBUG [AbstractEmployee]: ytdEarnings now returns = 100.0
+DEBUG [AbstractEmployee]: ytdTaxesPaid now returns = 0.0
+DEBUG [Constructor]: annualSalary passed in = 20.0
+DEBUG [Constructor]: getPayRate() now returns = 20.0
+DEBUG [Constructor]: name now returns = Jane Doe
+DEBUG [Constructor]: id now returns = 54321
+DEBUG [Constructor]: pretaxDeductions now returns = 1000.0
+DEBUG [Constructor]: ytdEarnings now returns = 100.0
+DEBUG [Constructor]: ytdTaxesPaid now returns = 0.0
+call getYTDEarnings100.0
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

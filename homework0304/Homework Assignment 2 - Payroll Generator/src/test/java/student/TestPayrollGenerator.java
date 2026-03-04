@@ -1,4 +1,4 @@
-/*
+package student;/*
  * Students, build off this class. We are providing one sample test case as file reading is new to
  * you.
  * 
@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import student.PayrollGenerator;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
