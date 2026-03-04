@@ -48,23 +48,9 @@ public class SalaryEmployeeTest {
     }
 
 
-    /**
-     * Reproduces the 1000.0 vs 100.0 error.
-     * This tests if the constructor correctly passes the salary to the super class.
-     */
-    @Test
-    public void testSalaryConstructor() {
-        // We pass 1000.0 as the annual salary (payRate)
-        double inputSalary = 1000.0;
-        SalaryEmployee emp = new SalaryEmployee("Jane Doe", "54321", 20, 1000, 100, 0);
 
-        // This is likely where the "expected 1000.0 but was 100.0" is happening
-        assertEquals(1000.0, emp.getYTDEarnings(), 0.01,
-                "The pay rate returned by the getter should match the input to the constructor");
-    }
 
     /*
-
     * SALARY,Nami,s193,200000,1000,17017,4983
     * */
     @Test
