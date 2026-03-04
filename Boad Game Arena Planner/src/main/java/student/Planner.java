@@ -164,15 +164,6 @@ public class Planner implements IPlanner {
         List<BoardGame> result = new ArrayList<>(currentGames);
 
 
-//        for (String raw : parts) {
-//            String cond = removeSpaces(raw);
-//            if (cond.isEmpty()) {
-//                continue;
-//            }
-//            Operation op = Operation.fromString(cond);
-//            String[] lr = splitByOperator(cond, op.token);
-//            String left = lr[0];
-//            String right = lr[1];
         for (String raw : parts) {
             String cond = raw.trim();
             if (cond.isEmpty()) {
@@ -219,71 +210,114 @@ public class Planner implements IPlanner {
         return out;
     }
 
-    private boolean matches(BoardGame g, GameData col, Operation op, String rightRaw) {
-        if (col == GameData.NAME) {
-            String nameValue = (g.getName() == null) ? "" : g.getName().toLowerCase();
-            String filterValue = (rightRaw == null) ? "" : rightRaw.toLowerCase();
+//    private boolean matches(BoardGame g, GameData col, Operation op, String rightRaw) {
+//        if (col == GameData.NAME) {
+//            String nameValue = (g.getName() == null) ? "" : g.getName().toLowerCase();
+//            String filterValue = (rightRaw == null) ? "" : rightRaw.toLowerCase();
+//
+//            if (op == Operation.CONTAINS) {
+//                if (nameValue.contains(filterValue)) {
+//                    return true;
+//                }
+//                String nameNoSpace = nameValue.replace(" ", "");
+//                String filterNoSpace = filterValue.replace(" ", "");
+//                return nameNoSpace.contains(filterNoSpace);
+//
+//            } else if (op == Operation.EQUALS) {
+//                return nameValue.equals(filterValue);
+//
+//            } else if (op == Operation.NOT_EQUALS) {
+//                return !nameValue.equals(filterValue);
+//
+//            } else if (op == Operation.GREATER || op == Operation.GREATER_EQ
+//                    || op == Operation.LESS || op == Operation.LESS_EQ) {
+//
+//                int cmp = nameValue.compareTo(filterValue);
+//
+//                if (op == Operation.GREATER) {
+//                    return cmp > 0;
+//                } else if (op == Operation.GREATER_EQ) {
+//                    return cmp >= 0;
+//                } else if (op == Operation.LESS) {
+//                    return cmp < 0;
+//                } else { // LESS_EQ
+//                    return cmp <= 0;
+//                }
+//            } else {
+//                throw new IllegalArgumentException("Invalid operator for name: " + op);
+//            }
+//        }
 
-            if (op == Operation.CONTAINS) {
-                if (nameValue.contains(filterValue)) {
-                    return true;
-                }
-                String nameNoSpace = nameValue.replace(" ", "");
-                String filterNoSpace = filterValue.replace(" ", "");
-                return nameNoSpace.contains(filterNoSpace);
+//
+//
+//        double leftNum = getNumericValue(g, col);
+//
+//        double rightNum;
+//        try {
+//            rightNum = Double.parseDouble(rightRaw);
+//        } catch (NumberFormatException e) {
+//            throw new IllegalArgumentException("Invalid number: " + rightRaw);
+//        }
+//
+//        switch (op) {
+//            case GREATER:
+//                return leftNum > rightNum;
+//            case GREATER_EQ:
+//                return leftNum >= rightNum;
+//            case LESS:
+//                return leftNum < rightNum;
+//            case LESS_EQ:
+//                return leftNum <= rightNum;
+//            case EQUALS:
+//                return leftNum == rightNum;
+//            case NOT_EQUALS:
+//                return leftNum != rightNum;
+//            case CONTAINS:
+//            default:
+//                throw new IllegalArgumentException("Invalid operator for numeric column: " + op);
+//        }
+//    }
 
-            } else if (op == Operation.EQUALS) {
-                return nameValue.equals(filterValue);
-
-            } else if (op == Operation.NOT_EQUALS) {
-                return !nameValue.equals(filterValue);
-
-            } else if (op == Operation.GREATER || op == Operation.GREATER_EQ
-                    || op == Operation.LESS || op == Operation.LESS_EQ) {
-
-                int cmp = nameValue.compareTo(filterValue);
-
-                if (op == Operation.GREATER) {
-                    return cmp > 0;
-                } else if (op == Operation.GREATER_EQ) {
-                    return cmp >= 0;
-                } else if (op == Operation.LESS) {
-                    return cmp < 0;
-                } else { // LESS_EQ
-                    return cmp <= 0;
-                }
-            } else {
-                throw new IllegalArgumentException("Invalid operator for name: " + op);
-            }
-        }
-
-
-
-        double leftNum = getNumericValue(g, col);
-
-        double rightNum;
-        try {
-            rightNum = Double.parseDouble(rightRaw);
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Invalid number: " + rightRaw);
-        }
+    /** Evaluates a name/string condition case-insensitively. */
+    private boolean matchesStringCondition(String name, Operation op, String rawValue) {
+        String gameName    = (name == null)     ? "" : name.toLowerCase();
+        String filterValue = (rawValue == null) ? "" : rawValue.toLowerCase();
 
         switch (op) {
-            case GREATER:
-                return leftNum > rightNum;
-            case GREATER_EQ:
-                return leftNum >= rightNum;
-            case LESS:
-                return leftNum < rightNum;
-            case LESS_EQ:
-                return leftNum <= rightNum;
-            case EQUALS:
-                return leftNum == rightNum;
-            case NOT_EQUALS:
-                return leftNum != rightNum;
             case CONTAINS:
+                return gameName.contains(filterValue)
+                        || gameName.replace(" ", "").contains(filterValue.replace(" ", ""));
+            case EQUALS:     return gameName.equals(filterValue);
+            case NOT_EQUALS: return !gameName.equals(filterValue);
+            case GREATER:    return gameName.compareTo(filterValue) > 0;
+            case GREATER_EQ: return gameName.compareTo(filterValue) >= 0;
+            case LESS:       return gameName.compareTo(filterValue) < 0;
+            case LESS_EQ:    return gameName.compareTo(filterValue) <= 0;
+            default:
+                throw new IllegalArgumentException("Invalid operator for name: " + op);
+        }
+    }
+
+    /** Parses the right-hand value and evaluates a numeric condition. */
+    private boolean matchesNumericCondition(double leftNum, Operation op, String rawValue) {
+        double rightNum = parseDouble(rawValue);
+        switch (op) {
+            case GREATER:    return leftNum >  rightNum;
+            case GREATER_EQ: return leftNum >= rightNum;
+            case LESS:       return leftNum <  rightNum;
+            case LESS_EQ:    return leftNum <= rightNum;
+            case EQUALS:     return leftNum == rightNum;
+            case NOT_EQUALS: return leftNum != rightNum;
             default:
                 throw new IllegalArgumentException("Invalid operator for numeric column: " + op);
+        }
+    }
+    /** Parses a string as a double, throwing a clean error if invalid. */
+    private double parseDouble(String raw) {
+        try {
+            return Double.parseDouble(raw);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Expected a number but got: " + raw);
         }
     }
 
