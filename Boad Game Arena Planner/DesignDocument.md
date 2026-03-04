@@ -263,7 +263,7 @@ Planner o-- BoardGame : filters/sorts
 Planner --> GameData : parses/sorts
 Planner --> Operation : parses
 BoardGame --> GameData : toStringWithInfo
-
+```
 
 
 
@@ -280,3 +280,10 @@ My design evolved to separate responsibilities more clearly: GameList manages a 
 and consistent case insensitive sorting, while Planner handles progressive filtering and sorting. 
 The most challenging part was ensuring progressive filtering, 
 enforcing that ID cannot be filtered or sorted, and maintaining stable sorting. 
+
+
+1.addToList("all", ...) adds every game from the filtered stream.
+2.Adding the same game twice should not create a duplicate — the list should stay unique.
+3.Removing by index should remove the correct game from the sorted list.
+4.Calling reset() should bring back all games,not just the last one.
+5.Sorting by rating descending should put the highest rated game first.
