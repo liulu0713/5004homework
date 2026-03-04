@@ -50,9 +50,6 @@ class BoardGame {
     +int hashCode()
 }
 class GameData {
-<<enum>>
-   NAME
-   ID
    +String getColumnName()
    +static GameData fromColumnName(String columnName)
    +static GameData fromString(String name)
