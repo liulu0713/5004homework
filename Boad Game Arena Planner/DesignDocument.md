@@ -9,7 +9,7 @@ If you are using mermaid markup to generate your class diagrams, you may edit th
 ## (INITIAL DESIGN): Class Diagram 
 
 Include a UML class diagram of your initial design for this assignment. If you are using the mermaid markdown, you may include the code for it here. For a reminder on the mermaid syntax, you may go [here](https://mermaid.js.org/syntax/classDiagram.html)
-
+```mermaid 
 ### Provided Code
 classDiagram
 direction LR
@@ -82,7 +82,7 @@ Provide a class diagram for the provided code as you read through it.  For the c
 Create a class diagram for the classes you plan to create. This is your initial design, and it is okay if it changes. Your starting points are the interfaces.
 classDiagram
 direction LR
-
+```mermaid 
 class GameList {
 -Set~BoardGame~ games
 +GameList()
