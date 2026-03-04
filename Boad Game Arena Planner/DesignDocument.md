@@ -17,65 +17,57 @@ classDiagram
 direction LR
 
 class IGameList {
-<<interface>>
-+String ADD_ALL
-+List~String~ getGameNames()
-+void clear()
-+int count()
-+void saveGame(String filename)
-+void addToList(String str, Stream~BoardGame~ filtered)
-+void removeFromList(String str)
+   <<interface>>
+   +String ADD_ALL
+   +List~String~ getGameNames()
+   +void clear()
+   +int count()
+   +void saveGame(String filename)
+   +void addToList(String str, Stream~BoardGame~ filtered)
+   +void removeFromList(String str)
 }
 class IPlanner {
 <<interface>>
-+Stream~BoardGame~ filter(String filter)
-+Stream~BoardGame~ filter(String filter, GameData sortOn)
-+Stream~BoardGame~ filter(String filter, GameData sortOn, boolean ascending)
-+void reset()
+   +Stream~BoardGame~ filter(String filter)
+   +Stream~BoardGame~ filter(String filter, GameData sortOn)
+   +Stream~BoardGame~ filter(String filter, GameData sortOn, boolean ascending)
+   +void reset()
 }
 
 class BoardGame {
-+String getName()
-+int getId()
-+int getMinPlayers()
-+int getMaxPlayers()
-+int getMinPlayTime()
-+int getMaxPlayTime()
-+double getDifficulty()
-+int getRank()
-+double getRating()
-+int getYearPublished()
-+String toStringWithInfo(GameData col)
-+boolean equals(Object obj)
-+int hashCode()
+   +String getName()
+    +int getId()
+   +int getMinPlayers()
+   +int getMaxPlayers()
+    +int getMinPlayTime()
+    +int getMaxPlayTime()
+    +double getDifficulty()
+    +int getRank()
+   +double getRating()
+    +int getYearPublished()
+    +String toStringWithInfo(GameData col)
+    +boolean equals(Object obj)
+    +int hashCode()
 }
 class GameData {
 <<enum>>
-NAME
-ID
-RATING
-DIFFICULTY
-RANK
-MIN_PLAYERS
-MAX_PLAYERS
-MIN_TIME
-MAX_TIME
-YEAR
-+String getColumnName()
-+static GameData fromColumnName(String columnName)
-+static GameData fromString(String name)
+   NAME
+   ID
+   +String getColumnName()
+   +static GameData fromColumnName(String columnName)
+   +static GameData fromString(String name)
 }
 
 class GameList
 class Planner
 
-IGameList <|.. GameList
-IPlanner  <|.. Planner
-Planner --> BoardGame : filters/sorts
-GameList --> BoardGame : stores
-Planner --> GameData : parses/sorts
-BoardGame --> GameData : toStringWithInfo
-Provide a class diagram for the provided code as you read through it.  For the classes you are adding, you will create them as a separate diagram, so for now, you can just point towards the interfaces for the provided code diagram.
+   IGameList <|.. GameList
+   IPlanner  <|.. Planner
+   Planner --> BoardGame : filters/sorts
+   GameList --> BoardGame : stores
+   Planner --> GameData : parses/sorts
+   BoardGame --> GameData : toStringWithInfo
+   Provide a class diagram for the provided code as you read through it.  For the classes you are adding, you will create them as a separate diagram, so for now, you can just point towards the interfaces for the provided code diagram.
 
 
 
@@ -167,6 +159,8 @@ For the final design, you just need to do a single diagram that includes both th
 
 > [!WARNING]
 > If you resubmit your assignment for manual grading, this is a section that often needs updating. You should double check with every resubmit to make sure it is up to date.
+
+```mermaid
 classDiagram
 direction LR
 
