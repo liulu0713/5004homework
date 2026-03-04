@@ -31,4 +31,8 @@ build
 # ingore ide files
 .vscode
 idea/
-bin
+bin.DS_Store
+build/
+.idea/
+out/
+*.class
