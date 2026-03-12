@@ -8,10 +8,10 @@ package student;
  * 
  */
 public class Greeting {
-      private int localityID;
-      private String localityName;
-      private String asciiGreeting;
-      private String unicodeGreeting;
+      private final int localityID;
+      private final String localityName;
+      private final String asciiGreeting;
+      private final String unicodeGreeting;
 
 
       private final String formatStr;
@@ -40,22 +40,23 @@ public class Greeting {
           this.unicodeGreeting = unicodeGreeting;
           this.formatStr = formatStr;
       }
-    /** Returns the locality id number. */
+      /** Returns the locality id number. */
       public int getLocalityID() {
           return this.localityID;
       }
+      /** Returns the locality name. */
       public String getLocalityName() {
         return localityName;
       }
-
+      /** Returns the ascii greeting string. */
       public String getAsciiGreeting() {
         return asciiGreeting;
       }
-
+     /** Returns the Unicode greeting string. */
       public String getUnicodeGreeting() {
         return unicodeGreeting;
       }
-      /** return unicode format. */
+      /** return unicode format string. */
       public String getFormatStr() {
         return getFormatStr(false);
       }

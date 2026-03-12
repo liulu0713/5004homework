@@ -23,20 +23,18 @@ public class Greeter {
     private int locality;
 
     /** List of locality options. */
-    private static List<String> localityList = List.of("Hawaii", "USA", "China", "Italy");
-
-    /** int value of Hawaii greeting. */
-    private static final int HAWAII = 1;
-
-    /** int value of china greeting. */
-    private static final int CHINA = 3;
-
-    /** int value of Italy greeting. */
-    private static final int ITALY = 4;
+    private static final List<String> localityList = List.of("Hawaii", "USA", "China", "Italy");
 
     /** int value of the DEFAULT locality. */
     private static final int DEFAULT_LOCALITY = 2;
 
+    private static final List<Greeting> greetings = List.of(
+            new Greeting(0, "Unused"),
+            new Greeting(1, "Hawaii", "Aloha"),
+            new Greeting(2, "USA"),
+            new Greeting(3, "China", "Ni Hao", "你好", "%%s, %s!"),
+            new Greeting(4, "Italy", "Ciao")
+    );
     /**
      * This is the constructor for the Greeter class.
      *
@@ -85,6 +83,7 @@ public class Greeter {
      * @return the int value of the locality
      */
     public int getLocality() {
+
         return locality;
     }
 
@@ -158,28 +157,8 @@ public class Greeter {
      *         Kailani!"
      */
     public String greet(boolean asciiOnly) {
-        String greeting; // default greeting
-        switch (locality) {
-            case HAWAII:
-                greeting = String.format("Aloha, %s!", name);
-                break;
-            // skip case 2, it is the default greeting
-            case CHINA:
-                if (asciiOnly) {
-                    greeting = String.format("%s, Ni Hao!", name);
-                } else {
-                    greeting = String.format("%s, 你好!", name);
-                    // note "你好!" while is allowed in java sa unicode,
-                    // most terminals don't allow non-ascii characters unless enabled
-                }
-                break;
-            case ITALY:
-                greeting = "Ciao, " + name + "!";
-                break;
-            default:
-                greeting = String.format("Hello, %s!", name); // default greeting
-        }
-        return greeting;
+        Greeting greeting = greetings.get(locality);
+        return String.format(greeting.getFormatStr(asciiOnly), name);
     }
 
     /**
@@ -196,7 +175,7 @@ public class Greeter {
     }
 
     /**
-     * For new objects is is often a good idea to override the hashCode method.
+     * For new objects is often a good idea to override the hashCode method.
      *
      * HashCodes are used in various data structures (like hashtables) to provide a 'unique'
      * identifier for an object. In this case as long as the name and locality are the same, the
