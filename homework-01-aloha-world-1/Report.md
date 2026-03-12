@@ -7,29 +7,7 @@ The following report contains questions you need to answer as part of your submi
 Please link your UML design file here. See resources in the assignment on how to
 link an image in markdown. You may also use [mermaid] class diagrams if you prefer, if so, include the mermaid code here.  You DO NOT have to include Greeting.java as part of the diagram, just the AlohaWorld application that includes: [AlohaWorld.java], [Greeter.java], and [ConsoleView.java].
 
-```mermaid
----
-title: Aloha World UML
----
-classDiagram
-    direction LR
-    AlohaWorld --> Greeter 
-    AlohaWorld --> ConsoleView : uses
-    ConsoleView --> Greeter : uses
-    class AlohaWorld {
-        + main(String[] args) : void
-    }
-    class Greeter {
-        - name : String
-        - locality : int
-        + Greeter(String name)
-        + getName() String
-        
-    }
-    class ConsoleView {
-       +displayGreeting(String message) void
-        
-    }
+
 ```
 
 ### Program Flow
