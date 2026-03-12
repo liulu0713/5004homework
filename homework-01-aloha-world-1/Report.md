@@ -7,7 +7,48 @@ The following report contains questions you need to answer as part of your submi
 Please link your UML design file here. See resources in the assignment on how to
 link an image in markdown. You may also use [mermaid] class diagrams if you prefer, if so, include the mermaid code here.  You DO NOT have to include Greeting.java as part of the diagram, just the AlohaWorld application that includes: [AlohaWorld.java], [Greeter.java], and [ConsoleView.java].
 
+```mermaid
+---
+title: Aloha World UML
+---
+classDiagram
+    direction LR
+    AlohaWorld ..> ConsoleView : uses
+    AlohaWorld ..> Greeter : uses
+    ConsoleView ..> Greeter : uses
 
+    class AlohaWorld {
+        -AlohaWorld()
+        +main(String[] args) void$
+    }
+
+    class ConsoleView {
+        -SCANNER : Scanner$
+        -LOCALITY_OPTIONS : List~String~$
+        -ConsoleView()
+        +getName() String$
+        +getLocality() int$
+        +checkRunAgain() boolean$
+        +printGreeting(String greeting) void$
+    }
+
+    class Greeter {
+        -name : String
+        -locality : int
+        -localityList : List~String~$
+        -DEFAULT_LOCALITY : int$
+        +Greeter(String name)
+        +Greeter(String name, int locality)
+        +getName() String
+        +getLocality() int
+        +setLocality(int locality) void
+        +greet() String
+        +greet(boolean asciiOnly) String
+        +equals(Object obj) boolean
+        +hashCode() int
+        +toString() String
+        +getLocalityList() List~String~$
+    }
 ```
 
 ### Program Flow
@@ -25,15 +66,15 @@ The program starts in AlohaWorld.main. First, it uses ConsoleView to ask the use
 1. List three additional java syntax items you didn't know when reading the code.  (make sure to use * for the list items, see example below, the backtick marks are used to write code inline with markdown)
    
    * (example) `final class`
-*`trim()`
-*`catch`
-*`throw new`
+*`scanner`
+*`get set`
+*`throw `
 2. For each syntax additional item listed above, explain what it does in your own words and then link a resource where you figured out what it does in the references section. 
 
     * (example) The `final` keyword when used on a class prevents the class from being subclassed. This means that the class cannot be extended by another class. This is useful when you want to prevent a class from being modified or extended[^1] . It is often the standard to do this when a class only contains static methods such as driver or utility classes. Math in Java is an example of a final class[^2] .
-    *`trim()` is a method used on an object to remove any leading or trailing whitespace.
-    * `catch` is used in cojunction with a try block to handle exceptions that occur during the execution of program.
-    * `throw new`is used to trigger an exception.it can stop the process and signal excatly that went wrong.
+    *`scanner` is a class in Java used to read input from the user.
+    * `get set` used to read and update the private fields of a class.
+    * `throw`is used to trigger an exception.it can stop the process and signal excatly that went wrong.
 3. What does `main` do in Java? 
 
     Go ahead and answer the question as a short paragraph / few sentences. Notice the indent, this is valid because it is a list item. (erase this line before writing.)
