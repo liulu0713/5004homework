@@ -8,20 +8,109 @@ If you are using mermaid markup to generate your class diagrams, you may edit th
 ## (INITIAL DESIGN): Class Diagram
 
 Include a UML class diagram of your initial design for this assignment. If you are using the mermaid markdown, you may include the code for it here. For a reminder on the mermaid syntax, you may go [here](https://mermaid.js.org/syntax/classDiagram.html)
+
+c```mermaid
 classDiagram
-    class IEmployee {
-       <<interface>>
-       +runPayroll(double hours) IPayStub
+class IEmployee {
+<<interface>>
++getName() String
++getID() String
++getPayRate() double
++getEmployeeType() String
++getYTDEarnings() double
++getYTDTaxesPaid() double
++getPretaxDeductions() double
++runPayroll(hoursWorked) IPayStub
++toCSV() String
 }
-class Employee {
-      -String name
-      -String id
-      -double payRate
-       +runPayroll(double hours) IPayStub
-}
-IEmployee <|.. Employee
 
+    class IPayStub {
+        <<interface>>
+        +getPay() double
+        +getTaxesPaid() double
+        +toCSV() String
+    }
 
+    class ITimeCard {
+        <<interface>>
+        +getEmployeeID() String
+        +getHoursWorked() double
+    }
+
+    class AbstractEmployee {
+        <<abstract>>
+        -name String
+        -id String
+        -payRate double
+        -pretaxDeductions double
+        -ytdEarnings double
+        -ytdTaxesPaid double
+        #TAX_RATE BigDecimal
+        +runPayroll(hoursWorked) IPayStub
+        +getName() String
+        +getID() String
+        +getPayRate() double
+        +getYTDEarnings() double
+        +getYTDTaxesPaid() double
+        +getPretaxDeductions() double
+        #calculateGrossPay(hoursWorked)* BigDecimal
+    }
+
+    class HourlyEmployee {
+        +getEmployeeType() String
+        +toCSV() String
+        #calculateGrossPay(hoursWorked) BigDecimal
+    }
+
+    class SalaryEmployee {
+        +getEmployeeType() String
+        +toCSV() String
+        #calculateGrossPay(hoursWorked) BigDecimal
+    }
+
+    class PayStub {
+        -employeeName String
+        -netPay double
+        -taxesPaid double
+        -ytdEarnings double
+        -ytdTaxesPaid double
+        +getPay() double
+        +getTaxesPaid() double
+        +toCSV() String
+    }
+
+    class TimeCard {
+        -employeeId String
+        -hoursWorked double
+        +getEmployeeID() String
+        +getHoursWorked() double
+    }
+
+    class Builder {
+        <<utility>>
+        +buildEmployeeFromCSV(csv) IEmployee
+        +buildTimeCardFromCSV(csv) ITimeCard
+    }
+
+    class PayrollGenerator {
+        <<driver>>
+        +main(args) void
+    }
+
+    IEmployee <|.. AbstractEmployee
+    IPayStub <|.. PayStub
+    ITimeCard <|.. TimeCard
+    AbstractEmployee <|-- HourlyEmployee
+    AbstractEmployee <|-- SalaryEmployee
+    Builder ..> IEmployee : creates
+    Builder ..> ITimeCard : creates
+    PayrollGenerator ..> Builder : uses
+    PayrollGenerator ..> IEmployee : uses
+    PayrollGenerator ..> ITimeCard : uses
+    PayrollGenerator ..> IPayStub : uses
+```
+
+Paste this directly into any Mermaid renderer (VS Code, [mermaid.live](https://mermaid.live), IntelliJ, etc.) and it will render the full class diagram.        
 
 
 ## (INITIAL DESIGN): Tests to Write - Brainstorm
@@ -46,8 +135,46 @@ You should feel free to number your brainstorm.
 
 ## (FINAL DESIGN): Class Diagram
 
-Go through your completed code, and update your class diagram to reflect the final design. We want both the diagram for your initial and final design, so you may include another image or include the finalized mermaid markup below. It is normal that the two diagrams don't match! Rarely (though possible) is your initial design perfect. 
+Go through your completed code, and update your class diagram to reflect the final design. We want both the diagram for your initial and final design, so you may include another image or include the finalized mermaid markup below. It is normal that the two diagrams don't match! Rarely (though possible) is your initial design perfect.
+classDiagram
+class IEmployee {
+<<interface>>
++getName() String
++getID() String
++getPayRate() double
++getEmployeeType() String
++getYTDEarnings() double
++getYTDTaxesPaid() double
++getPretaxDeductions() double
++runPayroll(hoursWorked) IPayStub
++toCSV() String
+}
 
+    class IPayStub {
+        <<interface>>
+        +getPay() double
+        +getTaxesPaid() double
+        +toCSV() String
+    }
+
+    class ITimeCard {
+        <<interface>>
+        +getEmployeeID() String
+        +getHoursWorked() double
+    }
+
+    class AbstractEmployee {
+        <<abstract>>
+        -name String
+        -id String
+        -payRate double
+        -pretaxDeductions double
+        -ytdEarnings double
+        -ytdTaxesPaid double
+        #TAX_RATE BigDecimal
+        +runPayroll(hoursWorked) IPayStub
+        +getName() String
+        +getI
 > [!WARNING]
 > If you resubmit your assignment for manual grading, this is a section that often needs updating. You should double check with every resubmit to make sure it is up to date.
 
