@@ -16,12 +16,15 @@ Did you use any external resources (you do not have to cite in class material)? 
 Yes.
 https://docs.oracle.com/javase/tutorial/collections/interfaces/index.html
 youtube java videos
-ChatGPT
+book <head first Java>
+book <A beginnier's guide>
 * one row per resource
 
 
 (Optional) What was your favorite part of the assignment?
-the collection of interfacec 
+My favorite part of the assignment was working with the collection of interfaces. It helped me better understand how interfaces can be used.
+inheritance runPayroll() and calculateGrossPay()
+I liked the idea of creating a calculateGrossPay(double hoursWorked) method that is implemented differently by SalaryEmployee and HourlyEmployee, while the runPayroll method remains the same in the parent class.
 (Optional) How would you improve the assignment?
-May be pay less attention on rounding up numbers
+
 ---
