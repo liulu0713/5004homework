@@ -23,9 +23,9 @@ public abstract class AbstractEmployee implements IEmployee {
             String name,
             String id,
             double payRate,
-            double pretaxDeductions,
             double ytdEarnings,
-            double ytdTaxesPaid) {
+            double ytdTaxesPaid,
+            double pretaxDeductions) {
         this.name = name;
         this.id = id;
         this.payRate = payRate;

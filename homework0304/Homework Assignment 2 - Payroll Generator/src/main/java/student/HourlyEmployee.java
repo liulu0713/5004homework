@@ -16,8 +16,8 @@ public class HourlyEmployee extends AbstractEmployee {
      * @param ytdTaxesPaid year-to-date taxes paid
      */
     public HourlyEmployee(String name, String id,
-                          double payRate, double pretaxDeductions, double ytdEarnings, double ytdTaxesPaid) {
-        super(name, id, payRate, pretaxDeductions, ytdEarnings, ytdTaxesPaid);
+                          double payRate, double ytdEarnings, double ytdTaxesPaid,double pretaxDeductions) {
+        super(name, id, payRate, ytdEarnings, ytdTaxesPaid,pretaxDeductions);
     }
     /** Calculates gross pay including overtime rules. */
     @Override

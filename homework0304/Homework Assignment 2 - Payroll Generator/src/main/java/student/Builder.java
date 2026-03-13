@@ -56,10 +56,10 @@ public final class Builder {
         double ytdTaxesPaid = Double.parseDouble(parts[6]);
 
         if (type.equalsIgnoreCase("SALARY")) {
-            return new SalaryEmployee(name, id, payRate, pretaxDeductions, ytdEarnings, ytdTaxesPaid);
+            return new SalaryEmployee(name, id, payRate, ytdEarnings, ytdTaxesPaid,pretaxDeductions);
         }
         if (type.equalsIgnoreCase("HOURLY")) {
-            return new HourlyEmployee(name, id, payRate, pretaxDeductions, ytdEarnings, ytdTaxesPaid);
+            return new HourlyEmployee(name, id, payRate, ytdEarnings, ytdTaxesPaid,pretaxDeductions);
         }
         return null;
     }

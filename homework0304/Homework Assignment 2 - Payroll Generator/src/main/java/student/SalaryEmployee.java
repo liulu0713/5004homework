@@ -17,9 +17,9 @@ public class SalaryEmployee extends AbstractEmployee {
      * @param ytdTaxesPaid year-to-date taxes paid
      */
     public SalaryEmployee(String name, String id, double annualSalary,
-                          double pretaxDeductions, double ytdEarnings, double ytdTaxesPaid) {
+                          double ytdEarnings, double ytdTaxesPaid,double pretaxDeductions) {
 
-        super(name, id, annualSalary, pretaxDeductions, ytdEarnings, ytdTaxesPaid);
+        super(name, id, annualSalary,ytdEarnings, ytdTaxesPaid,pretaxDeductions);
     }
 
     /** Calculates gross pay for salaried employee (annualSalary / 24). */
