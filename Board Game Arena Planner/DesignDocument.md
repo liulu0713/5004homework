@@ -1,4 +1,4 @@
-# Board Game Arena Planner Design Document
+# Board Game Arena Planner Design Document!
 
 
 This document is meant to provide a tool for you to demonstrate the design process. You need to work on this before you code, and after have a finished product. That way you can compare the changes, and changes in design are normal as you work through a project. It is contrary to popular belief, but we are not perfect our first attempt. We need to iterate on our designs to make them better. This document is a tool to help you do that.
@@ -11,10 +11,8 @@ If you are using mermaid markup to generate your class diagrams, you may edit th
 Include a UML class diagram of your initial design for this assignment. If you are using the mermaid markdown, you may include the code for it here. For a reminder on the mermaid syntax, you may go [here](https://mermaid.js.org/syntax/classDiagram.html)
 
 
-
 ```mermaid 
 classDiagram
-direction LR
 
 class IGameList {
    <<interface>>
@@ -45,10 +43,7 @@ class BoardGame {
     +int getRank()
    +double getRating()
     +int getYearPublished()
-    +String toStringWithInfo(GameData col)
-    +boolean equals(Object obj)
-    +int hashCode()
-}
+   
 class GameData {
    +String getColumnName()
    +static GameData fromColumnName(String columnName)
@@ -77,21 +72,20 @@ classDiagram
 direction LR
 
 class GameList {
-   -Set~BoardGame~ games
+   
    +GameList()
    +List~String~ getGameNames()
-   +void clear()
    +int count()
-   +void saveGame(String filename)
-   +void addToList(String str, Stream~BoardGame~ filtered)
-   +void removeFromList(String str)
-   -void sortBoardGames(List~BoardGame~ list)
+   +saveGame(String filename)
+   +addToList(String str, Stream~BoardGame~ filtered)
+   +removeFromList(String str)
+   -sortBoardGames(List~BoardGame~ list)
 }
 
 class Planner {
    -List~BoardGame~ allGames
    -List~BoardGame~ currentGames
-   +Planner(Set~BoardGame~ games)
+   +Planner(SetBoardGame~ games)
    +Stream~BoardGame~ filter(String filter)
    +Stream~BoardGame~ filter(String filter, GameData sortOn)
    +Stream~BoardGame~ filter(String filter, GameData sortOn, boolean ascending)
@@ -131,7 +125,7 @@ Planner --> BoardGame : filters/sorts
 
 ## (INITIAL DESIGN): Tests to Write - Brainstorm
 
-Write a test (in english) that you can picture for the class diagram you have created. This is the brainstorming stage in the TDD process. 
+Write a test (in english) that you can picture for the class diagram you have created. This is the brainstorming stage in the TDD process.
 
 > [!TIP]
 > As a reminder, this is the TDD process we are following:
@@ -160,112 +154,51 @@ For the final design, you just need to do a single diagram that includes both th
 
 ```mermaid
 classDiagram
-direction LR
+
+class BGArenaPlanner {
+-String DEFAULT_COLLECTION
+-BGArenaPlanner()
++main(args: String[]) void
+}
+
+class ConsoleApp {
+-Scanner IN
+-String DEFAULT_FILENAME
+-IGameList gameList
+-IPlanner planner
++ConsoleApp(IGameList, IPlanner)
++start() void
+-nextCommand() ConsoleText
+-processFilter() void
+-processList() void
+}
+
+class ConsoleText {
+<<enum>>
+WELCOME
+HELP
+INVALID
+CMD_EXIT
+CMD_HELP
++fromString(s: String) ConsoleText
+}
 
 class IGameList {
 <<interface>>
-+String ADD_ALL
-+List~String~ getGameNames()
-+void clear()
-+int count()
-+void saveGame(String filename)
-+void addToList(String str, Stream~BoardGame~ filtered)
-+void removeFromList(String str)
++ADD_ALL: String
++getGameNames() List~String~
++clear() void
++count() int
++saveGame(filename: String) void
++addToList(str: String, filtered: Stream~BoardGame~) void
++removeFromList(str: String) void
 }
 
 class IPlanner {
 <<interface>>
-+Stream~BoardGame~ filter(String filter)
-+Stream~BoardGame~ filter(String filter, GameData sortOn)
-+Stream~BoardGame~ filter(String filter, GameData sortOn, boolean ascending)
-+void reset()
-}
-
-class GameList {
--Set~BoardGame~ games
-+GameList()
-+List~String~ getGameNames()
-+void clear()
-+int count()
-+void saveGame(String filename)
-+void addToList(String str, Stream~BoardGame~ filtered)
-+void removeFromList(String str)
--void sortBoardGames(List~BoardGame~ list)
-}
-
-class Planner {
--List~BoardGame~ allGames
--List~BoardGame~ currentGames
-+Planner(Set~BoardGame~ games)
-+Stream~BoardGame~ filter(String filter)
-+Stream~BoardGame~ filter(String filter, GameData sortOn)
-+Stream~BoardGame~ filter(String filter, GameData sortOn, boolean ascending)
-+void reset()
--List~BoardGame~ applyFilter(List~BoardGame~, GameData, Operation, String)
--boolean matches(BoardGame, GameData, Operation, String)
--double getNumeric(BoardGame, GameData)
--void sortCurrent(GameData, boolean)
--String[] split(String, String)
--String removeSpaces(String)
-}
-
-class Operation {
-<<enum>>
-GREATER_EQ
-LESS_EQ
-NOT_EQUALS
-EQUALS
-CONTAINS
-GREATER
-LESS
-+String token
-+static Operation fromString(String s)
-}
-
-class BoardGame {
-+String getName()
-+int getId()
-+int getMinPlayers()
-+int getMaxPlayers()
-+int getMinPlayTime()
-+int getMaxPlayTime()
-+double getDifficulty()
-+int getRank()
-+double getRating()
-+int getYearPublished()
-+String toStringWithInfo(GameData col)
-+boolean equals(Object obj)
-+int hashCode()
-}
-
-class GameData {
-<<enum>>
-NAME
-ID
-RATING
-DIFFICULTY
-RANK
-MIN_PLAYERS
-MAX_PLAYERS
-MIN_TIME
-MAX_TIME
-YEAR
--String columnName
-+String getColumnName()
-+static GameData fromColumnName(String columnName)
-+static GameData fromString(String name)
-}
-
-IGameList <|.. GameList
-IPlanner  <|.. Planner
-GameList o-- BoardGame : contains
-Planner o-- BoardGame : filters/sorts
-Planner --> GameData : parses/sorts
-Planner --> Operation : parses
-BoardGame --> GameData : toStringWithInfo
++filter(filter: String) Stream~BoardGame~
++filter(filter: String, sortOn: GameData) Stream~BoardGame~
 ```
-
-
 
 
 ## (FINAL DESIGN): Reflection/Retrospective

@@ -101,11 +101,11 @@ public class GameList implements IGameList {
             throw new IllegalArgumentException("empty input");
         }
 
-        // Stream 只能用一次，先转成 List
+        // Stream only one time，convert to List
         List<BoardGame> filteredList = new ArrayList<>();
         filtered.forEach(filteredList::add);
 
-        // 按名字排序（你已有 sortBoardGames）
+        // sort by names
         sortBoardGames(filteredList);
 
         int beforeSize = games.size();
