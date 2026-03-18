@@ -30,16 +30,13 @@ String b = new String("hello");
 
 2. Logical sorting can be difficult when talking about case. For example, should "apple" come before "Banana" or after? How would you sort a list of strings in a case-insensitive manner? 
 
-[//]: # (case insentive sorting:)
 List<String> names = new ArrayList<>(List.of("apple", "Banana", "cherry"));
 names.sort(String.CASE_INSENSITIVE_ORDER);
 System.out.println(names); // [apple, Banana, cherry]
 
 
-
-
 3. In our version of the solution, we had the following code (snippet)
-    ```java
+  
     public static Operations getOperatorFromStr(String str) {
         if (str.contains(">=")) {
             return Operations.GREATER_THAN_EQUALS;
@@ -50,12 +47,10 @@ System.out.println(names); // [apple, Banana, cherry]
         } else if (str.contains("<")) {
             return Operations.LESS_THAN;
         } else if (str.contains("=="))...
-    ```
+
     Why would the order in which we checked matter (if it does matter)? Provide examples either way proving your point. 
 
-if (str.contains(">")) return GREATER_THAN;
-else if (str.contains(">=")) return GREATER_THAN_EQUALS; 
-
+  Yes,order matters.check the longer operator first,if not it may incorrectly match before the correct one.
 
 
 4. What is the difference between a List and a Set in Java? When would you use one over the other? 
@@ -72,13 +67,13 @@ Map is a key to value structure, we can visit by the key to find the value.
 6. GameData.java is actually an `enum` with special properties we added to help with column name mappings. What is an `enum` in Java? Why would we use it for this application?
 
 
-An enum in Java is a special type that represents a fixed set of constants. It is more type-safe and readable than using public static final String values, and it can also include fields and methods.
+An enum in Java is a special type that represents a fixed set of constants.If we don't use enum, the column will be dynamic and unknown,it is not ideally,we want to get the fixed column.
 
 
 
 
 7. Rewrite the following as an if else statement inside the empty code block.
-    ```java
+   
     switch (ct) {
                 case CMD_QUESTION: // same as help
                 case CMD_HELP:
@@ -88,9 +83,8 @@ An enum in Java is a special type that represents a fixed set of constants. It i
                 default:
                     CONSOLE.printf("%s%n", ConsoleText.INVALID);
             }
-    ``` 
+ 
 
-    ```java
     // your code here, don't forget the class name that is dropped in the switch block..
     // don't forget the class name that is dropped in the switch block..
 if (ct == ConsoleText.CMD_QUESTION || ct == ConsoleText.CMD_HELP) {
@@ -99,8 +93,7 @@ if (ct == ConsoleText.CMD_QUESTION || ct == ConsoleText.CMD_HELP) {
     CONSOLE.printf("%s%n", ConsoleText.INVALID);
 }
 
-    ```
-
+ 
 ## Deeper Thinking
 
 ConsoleApp.java uses a .properties file that contains all the strings
@@ -117,6 +110,26 @@ Post a copy of the run with the updated languages below this. Use three back tic
 ```text
 // your consoles output here
 ```
+Bienvenido a la aplicación de consola!
+Por favor ingrese un comando:
+
+> help
+
+Comandos disponibles:
+- help (ayuda)
+- question (pregunta)
+- exit (salir)
+
+> question
+
+Por favor ingrese su pregunta:
+
+> ¿Cuál es la capital de Francia?
+
+Procesando su solicitud...
+
+````
+
 
 Now, thinking about localization - we have the question of why does it matter? The obvious
 one is more about market share, but there may be other reasons.  I encourage

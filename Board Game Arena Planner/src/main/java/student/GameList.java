@@ -1,8 +1,14 @@
 package student;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+
+/**
+ * Implementation of the IGameList interface.
+ * Manages a set of board games with support for adding and removing by index, range, or name.
+ */
 public class GameList implements IGameList {
     /** Stores the selected games with no duplicates. */
     private final Set<BoardGame> games;
@@ -10,19 +16,16 @@ public class GameList implements IGameList {
     /**
      * Constructor for the GameList.
      */
-    public GameList() {
-        games = new HashSet<>();
+    public GameList() {this.games = new HashSet<>();
     }
 
     @Override
     public List<String> getGameNames() {
-        List<String> names = new ArrayList<>();
-        for (BoardGame g : games) {
-            names.add(g.getName());
+        return games.stream()
+                    .map(BoardGame::getName)
+                    .sorted(String.CASE_INSENSITIVE_ORDER)
+                    .collect(Collectors.toList());
         }
-        Collections.sort(names, String.CASE_INSENSITIVE_ORDER);
-        return names;
-    }
 
     @Override
     public void clear() {
@@ -51,12 +54,12 @@ public class GameList implements IGameList {
             java.nio.file.Path path = java.nio.file.Paths.get(f);
             java.nio.file.Path parent = path.getParent();
 
-            // ✅ create folder like "temp/" if needed
+            // create folder like "temp/" if needed
             if (parent != null) {
                 java.nio.file.Files.createDirectories(parent);
             }
 
-            // ✅ overwrite file (default behavior)
+            // overwrite file (default behavior)
             java.nio.file.Files.write(path, names,
                     java.nio.charset.StandardCharsets.UTF_8,
                     java.nio.file.StandardOpenOption.CREATE,
@@ -67,13 +70,57 @@ public class GameList implements IGameList {
         }
     }
 
+    /**
+     * helper method to parse input strings and return a list of target games.
+     * @param str The list of games to select from.
+     * @return A list of games matching the input requested.
+     */
+    private List<BoardGame> parseInputToGames(String str, List<BoardGame> filteredList) {
+        String input = str.trim();
+        List<BoardGame> targets = new ArrayList<>();
+
+        if (input.equalsIgnoreCase("all")){
+            targets.addAll(filteredList);
+        } else if (input.matches("\\d+")) {
+            int index = Integer.parseInt(input);
+            if(index < 1 || index > filteredList.size()){
+                throw new IllegalArgumentException("index out of range");
+            }
+            targets.add(filteredList.get(index - 1));
+        } else if (input.matches("\\d+\\s*-\\s*\\d+")) {
+            String[] parts = input.split("-");
+            int start = Integer.parseInt(parts[0].trim());
+            int end = Integer.parseInt(parts[1].trim());
+            if (start < 1 || end > filteredList.size() || start > end) {
+                throw new IllegalArgumentException("range out of range");
+        }
+            for (int i = start - 1; i <= end - 1; i++) {
+                targets.add(filteredList.get(i));
+            }
+        } else {
+            boolean found = false;
+
+            for (BoardGame g : filteredList) {
+                if (g.getName().equalsIgnoreCase(input)) {
+                    targets.add(g);
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                throw new IllegalArgumentException("No game named: " + input);
+            }
+        }
+
+        return targets;
+    }
+
+
 
     private void sortBoardGames(List<BoardGame> list) {
 
-        Collections.sort(list, new Comparator<BoardGame>() {
-
-            @Override
-            public int compare(BoardGame g1, BoardGame g2) {
+        list.sort((g1, g2) -> {
 
                 int result = g1.getName()
                         .compareToIgnoreCase(g2.getName());
@@ -83,7 +130,7 @@ public class GameList implements IGameList {
                 }
 
                 return Integer.compare(g1.hashCode(), g2.hashCode());
-            }
+
         });
     }
 
@@ -92,67 +139,19 @@ public class GameList implements IGameList {
         if (str == null) {
             throw new IllegalArgumentException("str is null");
         }
-        if (filtered == null) {
-            throw new IllegalArgumentException("filtered is null");
-        }
-
-        String input = str.trim();
-        if (input.isEmpty()) {
-            throw new IllegalArgumentException("empty input");
-        }
 
         // Stream only one time，convert to List
         List<BoardGame> filteredList = new ArrayList<>();
         filtered.forEach(filteredList::add);
 
-        // sort by names
-        sortBoardGames(filteredList);
 
-        int beforeSize = games.size();
+        //
+            List<BoardGame> toAdd = parseInputToGames(str, filteredList);
+            int beforeSize = games.size();
+            games.addAll(toAdd);
 
-        // 1) all
-        if (input.equalsIgnoreCase("all")) {
-            for (BoardGame game : filteredList) {
-                games.add(game);
-            }
-        } else if (input.matches("\\d+")) {
-            int index = Integer.parseInt(input);
-
-            if (index < 1 || index > filteredList.size()) {
-                throw new IllegalArgumentException("index out of range");
-            }
-
-            games.add(filteredList.get(index - 1));
-        } else if (input.matches("\\d+\\s*-\\s*\\d+")) {
-            String[] parts = input.split("-");
-            int start = Integer.parseInt(parts[0].trim());
-            int end = Integer.parseInt(parts[1].trim());
-
-            if (start < 1 || end > filteredList.size() || start > end) {
-                throw new IllegalArgumentException("range out of range");
-            }
-
-            for (int i = start - 1; i <= end - 1; i++) {
-                games.add(filteredList.get(i));
-            }
-        } else {
-            boolean found = false;
-
-            for (BoardGame g : filteredList) {
-                if (g.getName().equalsIgnoreCase(input)) {
-                    games.add(g);
-                    found = true;
-                    break;
-                }
-            }
-
-            if (!found) {
-                throw new IllegalArgumentException("No game named: " + input);
-            }
-        }
-
-        if (!input.equalsIgnoreCase("all") && games.size() == beforeSize) {
-            throw new IllegalArgumentException("No games added for: " + input);
+            if (!str.trim().equalsIgnoreCase("all") && games.size() == beforeSize) {
+                throw new IllegalArgumentException("No new games added for: " + str);
         }
 
     }
@@ -162,61 +161,19 @@ public class GameList implements IGameList {
         if (str == null) {
             throw new IllegalArgumentException("str is null");
         }
-
-        String input = str.trim();
-        if (input.isEmpty()) {
-            throw new IllegalArgumentException("empty input");
-        }
-
-        int beforeSize = games.size();
-
-        // all -> clear
-        if (input.equalsIgnoreCase("all")) {
+        if (str.trim().equalsIgnoreCase("all")) {
             games.clear();
             return;
         }
+            List<BoardGame> currentList = new ArrayList<>(games);
+            sortBoardGames(currentList);
 
-        List<BoardGame> currentList = new ArrayList<>(games);
-        sortBoardGames(currentList);
+            List<BoardGame> toRemove = parseInputToGames(str, currentList);
+            int beforeSize = games.size();
+            games.removeAll(toRemove);
 
-        if (input.matches("\\d+")) {
-
-            int index = Integer.parseInt(input);
-
-            if (index < 1 || index > currentList.size()) {
-                throw new IllegalArgumentException("index out of range");
-            }
-
-            games.remove(currentList.get(index - 1));
-        } else if (input.matches("\\d+\\s*-\\s*\\d+")) {
-            String[] parts = input.split("-");
-            int start = Integer.parseInt(parts[0].trim());
-            int end = Integer.parseInt(parts[1].trim());
-
-            if (start < 1 || end > currentList.size() || start > end) {
-                throw new IllegalArgumentException("range out of range");
-            }
-
-            for (int i = end - 1; i >= start - 1; i--) {
-                games.remove(currentList.get(i));
-            }
-        } else {
-            boolean found = false;
-
-            for (BoardGame g : currentList) {
-                if (g.getName().equalsIgnoreCase(input)) {
-                    games.remove(g);
-                    found = true;
-                    break;
-                }
-            }
-
-            if (!found) {
-                throw new IllegalArgumentException("No game named: " + input);
-            }
-        }
-        if (games.size() == beforeSize) {
-            throw new IllegalArgumentException("No games removed for: " + input);
+            if (games.size() == beforeSize) {
+                throw new IllegalArgumentException("No games removed for: " + str);
         }
     }
 
