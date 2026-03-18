@@ -77,7 +77,7 @@ class GameList {
    +List~String~ getGameNames()
    +int count()
    +saveGame(String filename)
-   +addToList(String str, Stream~BoardGame~ filtered)
+   +addToList(String str, Streamfiltered)
    +removeFromList(String str)
    -sortBoardGames(List~BoardGame~ list)
 }
@@ -86,9 +86,9 @@ class Planner {
    -List~BoardGame~ allGames
    -List~BoardGame~ currentGames
    +Planner(SetBoardGame~ games)
-   +Stream~BoardGame~ filter(String filter)
-   +Stream~BoardGame~ filter(String filter, GameData sortOn)
-   +Stream~BoardGame~ filter(String filter, GameData sortOn, boolean ascending)
+   +Streamfiltered(String filter)
+   +Streamfiltered(String filter, GameData sortOn)
+   +Streamfiltered(String filter, GameData sortOn, boolean ascending)
    +void reset()
    -List~BoardGame~ applyFilter(List~BoardGame~, GameData, Operation, String)
    -boolean matches(BoardGame, GameData, Operation, String)
@@ -154,50 +154,140 @@ For the final design, you just need to do a single diagram that includes both th
 
 ```mermaid
 classDiagram
+    direction TB
 
-class BGArenaPlanner {
--String DEFAULT_COLLECTION
--BGArenaPlanner()
-+main(args: String[]) void
-}
+    class BGArenaPlanner {
+        -String DEFAULT_COLLECTION
+        -BGArenaPlanner()
+        +main(args : String[]) void
+    }
 
-class ConsoleApp {
--Scanner IN
--String DEFAULT_FILENAME
--IGameList gameList
--IPlanner planner
-+ConsoleApp(IGameList, IPlanner)
-+start() void
--nextCommand() ConsoleText
--processFilter() void
--processList() void
-}
+    class ConsoleApp {
+        -Scanner IN
+        -String DEFAULT_FILENAME
+        -IGameList gameList
+        -IPlanner planner
+        +ConsoleApp(IGameList, IPlanner)
+        +start() void
+        -nextCommand() ConsoleText
+        -processFilter() void
+        -processList() void
+    }
 
-class ConsoleText {
-<<enum>>
-WELCOME
-HELP
-INVALID
-CMD_EXIT
-CMD_HELP
-+fromString(s: String) ConsoleText
-}
+    class ConsoleText {
+        <<enum>>
+        WELCOME
+        HELP
+        INVALID
+        CMD_EXIT
+        CMD_HELP
+        +fromString(s : String) ConsoleText
+    }
 
-class IGameList {
-<<interface>>
-+ADD_ALL: String
-+getGameNames() List~String~
-+clear() void
-+count() int
-+saveGame(filename: String) void
-+addToList(str: String, filtered: Stream~BoardGame~) void
-+removeFromList(str: String) void
-}
+    class IGameList {
+        <<interface>>
+        +ADD_ALL String
+        +getGameNames() List
+        +clear() void
+        +count() int
+        +saveGame(filename : String) void
+        +addToList(str : String, filtered : Stream) void
+        +removeFromList(str : String) void
+    }
 
-class IPlanner {
-<<interface>>
-+filter(filter: String) Stream~BoardGame~
-+filter(filter: String, sortOn: GameData) Stream~BoardGame~
+    class IPlanner {
+        <<interface>>
+        +filter(filter : String) Stream
+        +filter(filter : String, sortOn : GameData) Stream
+        +filter(filter : String, sortOn : GameData, asc : boolean) Stream
+        +reset() void
+    }
+
+    class GameList {
+        -Set games
+        +getGameNames() List
+        +clear() void
+        +count() int
+        +saveGame(filename : String) void
+        +addToList(str : String, filtered : Stream) void
+        +removeFromList(str : String) void
+        -resolveSelection(input : String, src : List) List
+        -sortedList(list : List) List
+    }
+
+    class Planner {
+        -List allGames
+        -List currentGames
+        +Planner(games : Set)
+        +filter(filter : String) Stream
+        +filter(filter : String, sortOn : GameData) Stream
+        +filter(filter : String, sortOn : GameData, asc : boolean) Stream
+        +reset() void
+        -applyFilter(list, col, op, val) List
+        -matches(game, col, op, val) boolean
+        -sortCurrent(col : GameData, asc : boolean) void
+    }
+
+    class Operation {
+        <<enum>>
+        GREATER_EQ
+        LESS_EQ
+        EQUALS
+        NOT_EQUALS
+        GREATER
+        LESS
+        CONTAINS
+        +token String
+        +fromString(s : String) Operation
+    }
+
+    class BoardGame {
+        +getName() String
+        +getId() int
+        +getMinPlayers() int
+        +getMaxPlayers() int
+        +getMinPlayTime() int
+        +getMaxPlayTime() int
+        +getRating() double
+        +getDifficulty() double
+        +getRank() int
+        +getYearPublished() int
+        +toStringWithInfo(col : GameData) String
+        +equals(obj : Object) boolean
+        +hashCode() int
+    }
+
+    class GameData {
+        <<enum>>
+        NAME
+        ID
+        RATING
+        DIFFICULTY
+        RANK
+        MIN_PLAYERS
+        MAX_PLAYERS
+        MIN_TIME
+        MAX_TIME
+        YEAR
+        -columnName String
+        +getColumnName() String
+        +fromColumnName(s : String) GameData
+        +fromString(s : String) GameData
+    }
+
+    BGArenaPlanner --> IPlanner : creates
+    BGArenaPlanner --> IGameList : creates
+    BGArenaPlanner --> ConsoleApp : creates
+    ConsoleApp --> IGameList : manages
+    ConsoleApp --> IPlanner : uses
+    ConsoleApp --> ConsoleText : reads
+    IGameList <|.. GameList : implements
+    IPlanner <|.. Planner : implements
+    GameList o-- BoardGame : contains
+    Planner o-- BoardGame : filters/sorts
+    Planner --> GameData : parses/sorts
+    Planner --> Operation : parses
+    BoardGame --> GameData : toStringWithInfo
 ```
 
 
