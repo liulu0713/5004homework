@@ -21,14 +21,14 @@ class IGameList {
    +void clear()
    +int count()
    +void saveGame(String filename)
-   +void addToList(String str, Stream~BoardGame~ filtered)
+   +void addToList(String str, Streamfiltered)
    +void removeFromList(String str)
 }
 class IPlanner {
    <<interface>>
-   +Stream~BoardGame~ filter(String filter)
-   +Stream~BoardGame~ filter(String filter, GameData sortOn)
-   +Stream~BoardGame~ filter(String filter, GameData sortOn, boolean ascending)
+   +Streamfiltered(String filter)
+   +Streamfiltered(String filter, GameData sortOn)
+   +Streamfiltered(String filter, GameData sortOn, boolean ascending)
    +void reset()
 }
 
@@ -45,7 +45,7 @@ class BoardGame {
     +int getYearPublished()
    
 class GameData {
-   +String getColumnName()
+   +String getGameNames()
    +static GameData fromColumnName(String columnName)
    +static GameData fromString(String name)
 }
@@ -74,7 +74,7 @@ direction LR
 class GameList {
    
    +GameList()
-   +List~String~ getGameNames()
+   +List.getGameNames()
    +int count()
    +saveGame(String filename)
    +addToList(String str, Streamfiltered)
