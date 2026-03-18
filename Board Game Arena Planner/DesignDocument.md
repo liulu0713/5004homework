@@ -43,6 +43,7 @@ class BoardGame {
     +int getRank()
    +double getRating()
     +int getYearPublished()
+}
    
 class GameData {
    +String getGameNames()
