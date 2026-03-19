@@ -11,80 +11,78 @@ Include a UML class diagram of your initial design for this assignment. If you a
 
 ```mermaid
 classDiagram
+    %%=========
+    %%Interfaces
+    %%=========
 class IEmployee {
 <<interface>>
-+getName() String
-+getID() String
-+getPayRate() double
-+getEmployeeType() String
-+getYTDEarnings() double
-+getYTDTaxesPaid() double
-+getPretaxDeductions() double
-+runPayroll(hoursWorked) IPayStub
++getName() : String
++getID() : String
++getPayRate() : double
++getEmployeeType() : String
++getYTDEarnings() : double
++getYTDTaxesPaid()  : double
++getPretaxDeductions() : double
++runPayroll(hoursWorked) : IPayStub
 +toCSV() String
 }
 
     class IPayStub {
         <<interface>>
-        +getPay() double
-        +getTaxesPaid() double
-        +toCSV() String
+        +getPay() : double
+        +getTaxesPaid() : double
+        +toCSV() : String
     }
 
     class ITimeCard {
         <<interface>>
-        +getEmployeeID() String
-        +getHoursWorked() double
+        +getEmployeeID() : String
+        +getHoursWorked() : double
     }
-
+%%=============
+%% Abstract Class
+%%=============
     class AbstractEmployee {
         <<abstract>>
-        -name String
-        -id String
-        -payRate double
-        -pretaxDeductions double
-        -ytdEarnings double
-        -ytdTaxesPaid double
-        #TAX_RATE BigDecimal
-        +runPayroll(hoursWorked) IPayStub
-        +getName() String
-        +getID() String
-        +getPayRate() double
-        +getYTDEarnings() double
-        +getYTDTaxesPaid() double
-        +getPretaxDeductions() double
-        #calculateGrossPay(hoursWorked)* BigDecimal
+        -name : String
+        -id : String
+        -payRate : double
+        -pretaxDeductions : double
+        -ytdEarnings : double
+        -ytdTaxesPaid : double
+        #TAX_RATE : BigDecimal
+        +runPayroll(hoursWorked) : IPayStub
+       
     }
 
+%%==================
+%% Concrete Employees
+%%==================
     class HourlyEmployee {
-        +getEmployeeType() String
-        +toCSV() String
-        #calculateGrossPay(hoursWorked) BigDecimal
+        +getEmployeeType() : String
+        +toCSV() : String
+        #calculateGrossPay(hoursWorked) : BigDecimal
     }
 
     class SalaryEmployee {
-        +getEmployeeType() String
-        +toCSV() String
-        #calculateGrossPay(hoursWorked) BigDecimal
+        +getEmployeeType() : String
+        +toCSV() : String
+        #calculateGrossPay(hoursWorked) : BigDecimal
     }
-
+%%=====================
+%% Paystub
+%%======================
     class PayStub {
-        -employeeName String
-        -netPay double
-        -taxesPaid double
-        -ytdEarnings double
-        -ytdTaxesPaid double
-        +getPay() double
-        +getTaxesPaid() double
-        +toCSV() String
+        -employeeName : String
+        -netPay : double
+        -taxesPaid : double
+        -ytdEarnings : double
+        -ytdTaxesPaid : double
+        +getPay() : double
+        +getTaxesPaid() : double
+        +toCSV() : String
     }
 
-    class TimeCard {
-        -employeeId String
-        -hoursWorked double
-        +getEmployeeID() String
-        +getHoursWorked() double
-    }
 
     class Builder {
         <<utility>>
@@ -97,7 +95,18 @@ class IEmployee {
         +main(args) void
     }
 
-   
+%% =====================
+%% Relationships
+%% =====================
+    AbstractEmployee --|> IEmployee
+    HourlyEmployee --|> AbstractEmployee
+    SalaryEmployee --|> AbstractEmployee
+    PayStub --|> IPayStub
+    TimeCard --|> ITimeCard
+
+    PayrollGenerator ..> Builder
+    PayrollGenerator ..> IEmployee
+    PayrollGenerator ..> IPayStub
 ```
 
 Paste this directly into any Mermaid renderer (VS Code, [mermaid.live](https://mermaid.live), IntelliJ, etc.) and it will render the full class diagram.        
@@ -215,6 +224,18 @@ Go through your completed code, and update your class diagram to reflect the fin
         <<driver>>
         +main(String[] args)$
     }
+%% =====================
+%% Relationships
+%% =====================
+    AbstractEmployee --|> IEmployee
+    HourlyEmployee --|> AbstractEmployee
+    SalaryEmployee --|> AbstractEmployee
+    PayStub --|> IPayStub
+    TimeCard --|> ITimeCard
+
+    PayrollGenerator ..> Builder
+    PayrollGenerator ..> IEmployee
+    PayrollGenerator ..> IPayStub
 ```
 
 ## (FINAL DESIGN): Reflection/Retrospective
