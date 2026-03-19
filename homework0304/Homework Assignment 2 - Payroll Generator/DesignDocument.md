@@ -97,17 +97,7 @@ class IEmployee {
         +main(args) void
     }
 
-    IEmployee <|.. AbstractEmployee
-    IPayStub <|.. PayStub
-    ITimeCard <|.. TimeCard
-    AbstractEmployee <|-- HourlyEmployee
-    AbstractEmployee <|-- SalaryEmployee
-    Builder ..> IEmployee : creates
-    Builder ..> ITimeCard : creates
-    PayrollGenerator ..> Builder : uses
-    PayrollGenerator ..> IEmployee : uses
-    PayrollGenerator ..> ITimeCard : uses
-    PayrollGenerator ..> IPayStub : uses
+   
 ```
 
 Paste this directly into any Mermaid renderer (VS Code, [mermaid.live](https://mermaid.live), IntelliJ, etc.) and it will render the full class diagram.        
@@ -136,19 +126,21 @@ You should feel free to number your brainstorm.
 ## (FINAL DESIGN): Class Diagram
 
 Go through your completed code, and update your class diagram to reflect the final design. We want both the diagram for your initial and final design, so you may include another image or include the finalized mermaid markup below. It is normal that the two diagrams don't match! Rarely (though possible) is your initial design perfect.
-classDiagram
-class IEmployee {
-<<interface>>
-+getName() String
-+getID() String
-+getPayRate() double
-+getEmployeeType() String
-+getYTDEarnings() double
-+getYTDTaxesPaid() double
-+getPretaxDeductions() double
-+runPayroll(hoursWorked) IPayStub
-+toCSV() String
-}
+
+```mermaid
+ classDiagram
+    class IEmployee {
+        <<interface>>
+        +getName() String
+        +getID() String
+        +getPayRate() double
+        +getEmployeeType() String
+        +getYTDEarnings() double
+        +getYTDTaxesPaid() double
+        +getPretaxDeductions() double
+        +runPayroll(double hoursWorked) IPayStub
+        +toCSV() String
+    }
 
     class IPayStub {
         <<interface>>
@@ -165,81 +157,65 @@ class IEmployee {
 
     class AbstractEmployee {
         <<abstract>>
-        -name String
-        -id String
-        -payRate double
-        -pretaxDeductions double
-        -ytdEarnings double
-        -ytdTaxesPaid double
-        #TAX_RATE BigDecimal
-        +runPayroll(hoursWorked) IPayStub
-        +getName() String
-        +getI
-> [!WARNING]
-> If you resubmit your assignment for manual grading, this is a section that often needs updating. You should double check with every resubmit to make sure it is up to date.
-
-classDiagram
-class IEmployee {
-<<interface>>
-+getName() String
-+getID() String
-+getPayRate() double
-+getPretaxDeductions() double
-+runPayroll(double hoursWorked) IPayStub
-+toCSV() String
-}
-
-    class AbstractEmployee {
-        <<abstract>>
-        #String name
-        #String id
-        #Double payRate
-        #Double pretaxDeductions
-        #Double ytdEarnings
-        #Double ytdTaxesPaid
+        -String name
+        -String id
+        -double payRate
+        -double pretaxDeductions
+        -double ytdEarnings
+        -double ytdTaxesPaid
+        #BigDecimal TAX_RATE
         +runPayroll(double hoursWorked) IPayStub
-        #calculateGrossPay(double hours) BigDecimal*
+        +getName() String
+        +getID() String
+        +getPayRate() double
+        +getYTDEarnings() double
+        +getYTDTaxesPaid() double
+        +getPretaxDeductions() double
+        +toCSV() String
+        #calculateGrossPay(double hoursWorked) BigDecimal*
     }
 
     class HourlyEmployee {
-        +calculateGrossPay(double hours) BigDecimal
+        +HourlyEmployee(String name, String id, double payRate, double ytdEarnings, double ytdTaxesPaid, double pretaxDeductions)
+        +getEmployeeType() String
+        #calculateGrossPay(double hoursWorked) BigDecimal
     }
 
     class SalaryEmployee {
-        +calculateGrossPay(double hours) BigDecimal
+        +SalaryEmployee(String name, String id, double annualSalary, double ytdEarnings, double ytdTaxesPaid, double pretaxDeductions)
+        +getEmployeeType() String
+        #calculateGrossPay(double hoursWorked) BigDecimal
     }
 
-    class IPayStub {
-        <<interface>>
-        +getNetPay() double
+    class PayStub {
+        -String employeeName
+        -double netPay
+        -double taxesPaid
+        -double ytdEarnings
+        -double ytdTaxesPaid
+        +getPay() double
         +getTaxesPaid() double
         +toCSV() String
     }
 
-    class ITimeCard {
-        <<interface>>
+    class TimeCard {
+        -String employeeId
+        -double hoursWorked
         +getEmployeeID() String
         +getHoursWorked() double
     }
 
-    class PayrollGenerator {
-        +main(String[] args)
-    }
-
     class Builder {
-        +buildEmployeeFromCSV(String csv) IEmployee
-        +buildTimeCardFromCSV(String csv) ITimeCard
+        <<utility>>
+        +buildEmployeeFromCSV(String csv) IEmployee$
+        +buildTimeCardFromCSV(String csv) ITimeCard$
     }
 
-    IEmployee <|.. AbstractEmployee : implements
-    AbstractEmployee <|-- HourlyEmployee : extends
-    AbstractEmployee <|-- SalaryEmployee : extends
-    PayrollGenerator ..> IEmployee : uses
-    PayrollGenerator ..> ITimeCard : uses
-    IEmployee ..> IPayStub : creates
-    Builder ..> IEmployee : builds
-
-
+    class PayrollGenerator {
+        <<driver>>
+        +main(String[] args)$
+    }
+```
 
 ## (FINAL DESIGN): Reflection/Retrospective
 
@@ -248,3 +224,5 @@ class IEmployee {
 
 Take time to reflect on how your design has changed. Write in *prose* (i.e. do not bullet point your answers - it matters in how our brain processes the information). Make sure to include what were some major changes, and why you made them. What did you learn from this process? What would you do differently next time? What was the most challenging part of this process? For most students, it will be a paragraph or two. 
 My design has included interfaces,inheritance and abstractClasses.The most challenging and time-consuming part of this process was achieving the numerical precision required to pass the test suite. I initially used double for all calculations, which led to a cascade of failures due to tiny floating-point errors. Even after switching to BigDecimal, I failed the tests multiple times because of 0.01 differences in Misa Amane’s payroll.
+
+My design evolved significantly from the initial sketch to the final implementation, particularly around the class hierarchy and where responsibility lives. The initial design placed toCSV() independently in both HourlyEmployee and SalaryEmployee, but I realized this was a violation of the DRY (Don't Repeat Yourself) principle since the format string was identical in both subclasses [Beck, K. (1999). Refactoring: Improving the Design of Existing Code. Addison-Wesley]. By moving toCSV() into AbstractEmployee, any future change to the CSV format only needs to happen in one place, which is a core benefit of inheritance-based design. I also had to revisit how getEmployeeType() is called within the abstract class — since it is abstract itself, the polymorphic dispatch at runtime ensures the correct type string ("HOURLY" or "SALARY") is returned even though the method body lives in the parent.

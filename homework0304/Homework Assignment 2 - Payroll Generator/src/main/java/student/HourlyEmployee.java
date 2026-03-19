@@ -16,8 +16,8 @@ public class HourlyEmployee extends AbstractEmployee {
      * @param ytdTaxesPaid year-to-date taxes paid
      */
     public HourlyEmployee(String name, String id,
-                          double payRate, double ytdEarnings, double ytdTaxesPaid,double pretaxDeductions) {
-        super(name, id, payRate, ytdEarnings, ytdTaxesPaid,pretaxDeductions);
+                          double payRate, double ytdEarnings, double ytdTaxesPaid, double pretaxDeductions) {
+        super(name, id, payRate, ytdEarnings, ytdTaxesPaid, pretaxDeductions);
     }
     /** Calculates gross pay including overtime rules. */
     @Override
@@ -37,19 +37,6 @@ public class HourlyEmployee extends AbstractEmployee {
     @Override
     public String getEmployeeType() {
         return "HOURLY";
-    }
-    /** get strings. */
-    @Override
-    public String toCSV() {
-        return String.format("%s,%s,%s,%.2f,%.2f,%.2f,%.2f",
-                getEmployeeType(),
-                getName(),
-                getID(),
-                getPayRate(),
-                getPretaxDeductions(),
-                getYTDEarnings(),
-                getYTDTaxesPaid());
-
     }
 
 }

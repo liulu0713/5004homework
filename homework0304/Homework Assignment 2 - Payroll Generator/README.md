@@ -1,9 +1,9 @@
 Name:Lu Liu
-https://github.com/liulu0713/5004homework
+https://github.com/liulu0713/5004homework/tree/main/homework0304/Homework%20Assignment%202%20-%20Payroll%20Generator
 
 How many hours did it take you to complete this assignment (estimate)?
 
-40 hours
+60 hours
 
 Did you collaborate with any other students/TAs/Professors? If so, tell us who and in what
 capacity.

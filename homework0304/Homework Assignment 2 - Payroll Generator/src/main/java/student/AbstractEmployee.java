@@ -95,6 +95,21 @@ public abstract class AbstractEmployee implements IEmployee {
         return pretaxDeductions;
     }
 
+    /**
+     * Converts the employee to a CSV string.
+     * Format: employee_type,name,ID,payRate,pretaxDeductions,YTDEarnings,YTDTaxesPaid
+     */
+    @Override
+    public String toCSV() {
+        return String.format("%s,%s,%s,%.2f,%.2f,%.2f,%.2f",
+                getEmployeeType(),
+                getName(),
+                getID(),
+                getPayRate(),
+                getPretaxDeductions(),
+                getYTDEarnings(),
+                getYTDTaxesPaid());
+    }
 
 }
 

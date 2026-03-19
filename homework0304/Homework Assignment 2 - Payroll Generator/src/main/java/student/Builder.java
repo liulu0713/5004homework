@@ -1,7 +1,7 @@
 package student;
 
-import java.util.HashMap;
-import java.util.Map;
+
+
 
 /**
  *This is a static class (essentially functions) that will help you build objects from CSV strings.
@@ -17,7 +17,9 @@ public final class Builder {
 
     /**
      * Builds an employee object from a CSV string.
-     *You may end up checking the type of employee (hourly or salary) by looking at the first element of the CSV string. Then building an object specific to that type
+     * You may end up checking the type of employee (hourly or salary) by
+     * looking at the first element of the CSV string.
+     * Then building an object specific to that type
      * @param csv the CSV string
      * @return the employee object
      */
@@ -56,10 +58,10 @@ public final class Builder {
         double ytdTaxesPaid = Double.parseDouble(parts[6]);
 
         if (type.equalsIgnoreCase("SALARY")) {
-            return new SalaryEmployee(name, id, payRate, ytdEarnings, ytdTaxesPaid,pretaxDeductions);
+            return new SalaryEmployee(name, id, payRate, ytdEarnings, ytdTaxesPaid, pretaxDeductions);
         }
         if (type.equalsIgnoreCase("HOURLY")) {
-            return new HourlyEmployee(name, id, payRate, ytdEarnings, ytdTaxesPaid,pretaxDeductions);
+            return new HourlyEmployee(name, id, payRate, ytdEarnings, ytdTaxesPaid, pretaxDeductions);
         }
         return null;
     }

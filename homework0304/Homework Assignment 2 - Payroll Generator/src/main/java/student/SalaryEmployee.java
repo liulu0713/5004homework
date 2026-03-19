@@ -17,9 +17,9 @@ public class SalaryEmployee extends AbstractEmployee {
      * @param ytdTaxesPaid year-to-date taxes paid
      */
     public SalaryEmployee(String name, String id, double annualSalary,
-                          double ytdEarnings, double ytdTaxesPaid,double pretaxDeductions) {
+                          double ytdEarnings, double ytdTaxesPaid, double pretaxDeductions) {
 
-        super(name, id, annualSalary,ytdEarnings, ytdTaxesPaid,pretaxDeductions);
+        super(name, id, annualSalary, ytdEarnings, ytdTaxesPaid, pretaxDeductions);
     }
 
     /** Calculates gross pay for salaried employee (annualSalary / 24). */
@@ -35,16 +35,4 @@ public class SalaryEmployee extends AbstractEmployee {
         return "SALARY";
     }
 
-    /** Converts employee to CSV format. */
-    @Override
-    public String toCSV() {
-        return String.format("%s,%s,%s,%.2f,%.2f,%.2f,%.2f",
-                getEmployeeType(),
-                getName(),
-                getID(),
-                getPayRate(),
-                getPretaxDeductions(),
-                getYTDEarnings(),
-                getYTDTaxesPaid());
-    }
 }
