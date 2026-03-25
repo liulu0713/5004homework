@@ -74,7 +74,15 @@ public class DomainNameModelImpl implements DomainNameModel {
         try {
             String ip = NetUtils.lookUpIp(hostname);
             InputStream stream = NetUtils.getIpDetails(ip, Formats.JSON);
-            IPApiBean bean = JSON_MAPPER.readValue(stream, IPApiBean.class);
+            // Guard: if the network is blocked or returns nothing, stream will be empty.
+            // Attempting to deserialize an empty stream causes Jackson to throw a
+            // MismatchedInputException, which surfaces as a confusing RuntimeException.
+            byte[] bytes = stream.readAllBytes();
+            if (bytes.length == 0) {
+                throw new RuntimeException("Network request returned empty response for: " + hostname
+                        + " — check connectivity or add the record to hostrecords.xml manually.");
+            }
+            IPApiBean bean = JSON_MAPPER.readValue(bytes, IPApiBean.class);
 
             DNRecord newRecord = new DNRecord(
                     hostname, bean.getIp(), bean.getCity(),

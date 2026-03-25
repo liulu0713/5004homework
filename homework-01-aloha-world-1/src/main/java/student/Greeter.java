@@ -23,12 +23,12 @@ public class Greeter {
     private int locality;
 
     /** List of locality options. */
-    private static final List<String> localityList = List.of("Hawaii", "USA", "China", "Italy");
+    private static final List<String> LOCALITY_LIST = List.of("Hawaii", "USA", "China", "Italy");
 
     /** int value of the DEFAULT locality. */
     private static final int DEFAULT_LOCALITY = 2;
-
-    private static final List<Greeting> greetings = List.of(
+    /** create a list of Greeting. */
+    private static final List<Greeting> GREETINGS = List.of(
             new Greeting(0, "Unused"),
             new Greeting(1, "Hawaii", "Aloha"),
             new Greeting(2, "USA"),
@@ -39,7 +39,6 @@ public class Greeter {
      * This is the constructor for the Greeter class.
      *
      * This constructor assumes 2 as the default locality.
-     * 
      * @param name of the person to greet
      */
     public Greeter(String name) {
@@ -54,9 +53,9 @@ public class Greeter {
      */
     public Greeter(String name, int locality) {
         this.name = name;
-        if (locality < 1 || locality > localityList.size()) {
+        if (locality < 1 || locality > LOCALITY_LIST.size()) {
             throw new IllegalArgumentException(
-                    String.format("Locality must be between 1 and %d", localityList.size()));
+                    String.format("Locality must be between 1 and %d", LOCALITY_LIST.size()));
         }
         this.locality = locality;
     }
@@ -74,12 +73,12 @@ public class Greeter {
         return name;
     }
 
+
+
     /**
      * Returns the locality of the greeter.
-     *
      * This is called an "accessor" method. It is a method that returns the value of a private
      * field. It is a good practice to make fields private and use accessors to get the value.
-     * 
      * @return the int value of the locality
      */
     public int getLocality() {
@@ -99,12 +98,13 @@ public class Greeter {
      *        IllegalArgumentException
      */
     public void setLocality(int locality) {
-        if (locality < 1 || locality > localityList.size()) {
+        if (locality < 1 || locality > LOCALITY_LIST.size()) {
             throw new IllegalArgumentException(
-                    String.format("Locality must be between 1 and %d", localityList.size()));
+                    String.format("Locality must be between 1 and %d", LOCALITY_LIST.size()));
         }
         this.locality = locality;
     }
+
 
     /**
      * This method is used to greet the user. It will return a greeting based on their set locality.
@@ -113,7 +113,6 @@ public class Greeter {
      * This is called an "overloaded" method. It is a method with the same name as another method,
      * but with different parameters. This helps simplify the code calls, and allows for more
      * flexibility in the code.
-     * 
      * @return the greeting
      * @see #greet(boolean)
      */
@@ -157,22 +156,23 @@ public class Greeter {
      *         Kailani!"
      */
     public String greet(boolean asciiOnly) {
-        Greeting greeting = greetings.get(locality);
+        Greeting greeting = GREETINGS.get(locality);
         return String.format(greeting.getFormatStr(asciiOnly), name);
     }
+
 
     /**
      * Returns the locality as a string. If the locality is not between 1 and localityList.size() it
      * will return "USA"
-     * 
      * @return the locality as a string
      */
     private String getLocalityString() {
-        if (locality < 1 || locality > localityList.size()) {
+        if (locality < 1 || locality > LOCALITY_LIST.size()) {
             return "USA";
         }
-        return localityList.get(locality - 1);
+        return LOCALITY_LIST.get(locality - 1);
     }
+
 
     /**
      * For new objects is often a good idea to override the hashCode method.
@@ -182,7 +182,6 @@ public class Greeter {
      * hashcode will be the same.
      *
      * Java assumes that if .equals is true, the hashcodes should also be the same.
-     * 
      * @return the hashcode
      */
     @Override
@@ -241,10 +240,9 @@ public class Greeter {
 
     /**
      * Returns a copy of the locality list.
-     * 
      * @return a copy of the locality list
      */
     public static List<String> getLocalityList() {
-        return List.copyOf(localityList); // return a copy so original isn't modified
+        return List.copyOf(LOCALITY_LIST); // return a copy so original isn't modified
     }
 }

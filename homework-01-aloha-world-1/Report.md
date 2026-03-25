@@ -108,8 +108,7 @@ These questions require deeper thinking of the topic. We don't expect 100% corre
 
 
 2. Right now, the application isn't very dynamic in that it can be difficult to add new languages and greetings without modifying the code every time. Just thinking programmatically,  how could you make the application more dynamic? You are free to reference Geeting.java and how that could be used in your design.
-The greetings are hard coded,it is hard to add more new functions.we could move the greetung date out of the hard coded java files and into an external file.
-
+   instead of hardcoding,we could create multiple Greeting objects,the program would then retrieve the appropriate greeting based on the user's selection. Making the application much more dynamic and extensible.
 
 > [!IMPORTANT]
 >  After you upload the files to your github (ideally you have been committing throughout this progress / after you answer every question) - make sure to look at your completed assignment on github/in the browser! You can make sure images are showing up/formatting is correct, etc. The TAs will actually look at your assignment on github, so it is important that it is formatted correctly.

@@ -10,34 +10,45 @@ If you are using mermaid markup to generate your class diagrams, you may edit th
 Include a UML class diagram of your initial design for this assignment. If you are using the mermaid markdown, you may include the code for it here. For a reminder on the mermaid syntax, you may go [here](https://mermaid.js.org/syntax/classDiagram.html)
 
 
-%% =========
-%% Controller layer
-%% =========
+```mermaid
+classDiagram
+    %% Controller Layer
+    class DNInfoApp {
+        +main(args: String[])
+    }
+    class ArgsController {
+        -model: DomainNameModel
+        -view: DataFormatter
+        +processRequest(args: String[])
+    }
 
-class DNInfoApp
+    %% Model Layer
+    class DomainNameModel {
+        <<interface>>
+        +getDNRecord(query: String) DNRecord
+    }
+   
+   
+    class DNRecord {
+        <<record>>
+        +String ip
+        +String city
+        +String isp
+    }
+    class IPApiBean {
+        <<bean>>
+        -String status
+        -String country
+        +getStatus() String
+        +setStatus(String s)
+    }
 
-class ArgsController
+    %% View Layer
+    class DataFormatter {
+        +format(record: DNRecord, format: Formats) String
+    }
 
-%% =========
-%% Model Layer
-%% =========
-
-class DomainNameModel
-
-class DomaininNameModelImpl
-
-class DNRecord
-
-class IPApiBean
-
-%% =========
-%% view Layer
-%% =========
-
-class DataFromatter
-
-class Formats
-
+```
 
 
 ## (INITIAL DESIGN): Tests to Write - Brainstorm
@@ -68,11 +79,11 @@ Go through your completed code, and update your class diagram to reflect the fin
 > [!WARNING]
 > If you resubmit your assignment for manual grading, this is a section that often needs updating. You should double check with every resubmit to make sure it is up to date.
 
+```mermaid
 classDiagram
     class DNInfoApp {
         +main(String[] args)$
     }
-
     class ArgsController {
         -DomainNameModel model
         -Formats format
@@ -176,20 +187,7 @@ classDiagram
         +getUrlContents(String url)$ InputStream
     }
 
-    DNInfoApp --> ArgsController : creates and calls run()
-    ArgsController --> DomainNameModel : calls getInstance()
-    ArgsController --> Formats : sets format
-    ArgsController --> DomainNameModel : calls writeRecords()
-    DomainNameModel <|.. DomainNameModelImpl
-    DomainNameModel ..> DNRecord : returns
-    DomainNameModelImpl --> IPApiBean : deserializes API response into
-    DomainNameModelImpl --> NetUtils : calls lookUpIp() and getIpDetails()
-    DomainNameModelImpl --> DNRecord : stores and returns
-    DomainNameModelImpl --> DomainXmlWrapper : uses to load and save XML
-    DataFormatter --> DomainXmlWrapper : wraps records for XML output
-    DataFormatter --> Formats : switches on format
-
-
+```
 
 
 ## (FINAL DESIGN): Reflection/Retrospective
