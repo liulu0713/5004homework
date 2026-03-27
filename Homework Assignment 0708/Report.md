@@ -35,7 +35,7 @@ Class: A full-featured blueprint for objects that can hold mutable state and com
 Use this when you need encapsulation or need to change values after the object is created.
 
 7. What is a java "bean"?
-   standard for creating reusable software components.
+ Jaca bean is a standard for creating reusable classes. The class must have a public,no argument constructor.
 
 ## Deeper Thinking
 
@@ -45,7 +45,14 @@ Data of many types are  often available online (Here is a list of a bunch of [fr
 
 Take some time to find other online data APIs that you might be interested in. What kind of data would you like to work with? What kind of data would be useful for you to have access to? Another example of an API a random dog image API https://dog.ceo/dog-api/!
 
+
 🔥 Find at least two other APIs/Data sources (so downloadable data is also valid). Link them, and provide a brief description of what kind of data they provide. These will act as your references for this assignment.
+Dog CEO’s Dog API
+Provides random dog images and breed information.
+
+Open Library API (Educational & Media Data)
+Access to millions of book records, author metadata, and cover images.
+
 
 However, just because information is freely available online, it does not mean
 

@@ -9,32 +9,37 @@ If you are using mermaid markup to generate your class diagrams, you may edit th
 
 Include a UML class diagram of your initial design for this assignment. If you are using the mermaid markdown, you may include the code for it here. For a reminder on the mermaid syntax, you may go [here](https://mermaid.js.org/syntax/classDiagram.html)
 
-
+ 
 ```mermaid
 classDiagram
-    %% Controller Layer
+%% =======================
+%% Controller Layer
+%% =======================
     class DNInfoApp {
-        +main(args: String[])
-    }
-    class ArgsController {
-        -model: DomainNameModel
-        -view: DataFormatter
-        +processRequest(args: String[])
+        +main(String[] args)
     }
 
-    %% Model Layer
+    class ArgsController {
+        -model DomainNameModel
+        -view DataFormatter
+        +processRequest(String[] args)
+    }
+
+%% =======================
+%% Model Layer
+%% =======================
     class DomainNameModel {
         <<interface>>
-        +getDNRecord(query: String) DNRecord
+        +getDNRecord(String query) DNRecord
     }
-   
-   
+
     class DNRecord {
         <<record>>
         +String ip
         +String city
         +String isp
     }
+
     class IPApiBean {
         <<bean>>
         -String status
@@ -43,11 +48,36 @@ classDiagram
         +setStatus(String s)
     }
 
-    %% View Layer
+%% =======================
+%% View Layer
+%% =======================
     class DataFormatter {
-        +format(record: DNRecord, format: Formats) String
+        +format(DNRecord record, Formats format) String
     }
 
+%% =======================
+%% Enum
+%% =======================
+    class Formats {
+        <<enum>>
+        JSON
+        XML
+        PRETTY
+    }
+
+%% =======================
+%% Relationships
+%% =======================
+    DNInfoApp --> ArgsController
+
+    ArgsController --> DomainNameModel
+    ArgsController --> DataFormatter
+
+    DomainNameModel --> DNRecord
+    DomainNameModel --> IPApiBean
+
+    DataFormatter --> DNRecord
+    DataFormatter --> Formats
 ```
 
 
@@ -81,9 +111,16 @@ Go through your completed code, and update your class diagram to reflect the fin
 
 ```mermaid
 classDiagram
+%% =======================
+%% Entry
+%% =======================
     class DNInfoApp {
         +main(String[] args)$
     }
+
+%% =======================
+%% Controller
+%% =======================
     class ArgsController {
         -DomainNameModel model
         -Formats format
@@ -94,6 +131,9 @@ classDiagram
         +run(String[] args) void
     }
 
+%% =======================
+%% Model Interface
+%% =======================
     class DomainNameModel {
         <<interface>>
         +DATABASE$ String
@@ -104,6 +144,23 @@ classDiagram
         +getInstance(String database)$ DomainNameModel
     }
 
+%% =======================
+%% Model Implementation
+%% =======================
+    class DomainNameModelImpl {
+        -List~DNRecord~ records
+        -String dbPath
+        -ObjectMapper JSON_MAPPER$
+        +DomainNameModelImpl(String dbPath)
+        +getRecords() List~DNRecord~
+        +getRecord(String hostname) DNRecord
+        -loadFromXml() void
+        -saveToXml() void
+    }
+
+%% =======================
+%% Data Objects
+%% =======================
     class DNRecord {
         <<record>>
         +hostname String
@@ -116,15 +173,12 @@ classDiagram
         +longitude double
     }
 
-    class DomainNameModelImpl {
-        -List~DNRecord~ records
-        -String dbPath
-        -ObjectMapper JSON_MAPPER$
-        +DomainNameModelImpl(String dbPath)
-        +getRecords() List~DNRecord~
-        +getRecord(String hostname) DNRecord
-        -loadFromXml() void
-        -saveToXml() void
+    class DomainXmlWrapper {
+        -Collection~DNRecord~ domain
+        +DomainXmlWrapper()
+        +DomainXmlWrapper(Collection~DNRecord~)
+        +getDomain() Collection~DNRecord~
+        +setDomain(Collection~DNRecord~) void
     }
 
     class IPApiBean {
@@ -152,6 +206,9 @@ classDiagram
         +setLongitude(double) void
     }
 
+%% =======================
+%% View
+%% =======================
     class DataFormatter {
         +write(Collection~DNRecord~, Formats, OutputStream)$ void
         -prettyPrint(Collection~DNRecord~, OutputStream)$ void
@@ -161,14 +218,9 @@ classDiagram
         -writeCSVData(Collection~DNRecord~, OutputStream)$ void
     }
 
-    class DomainXmlWrapper {
-        -Collection~DNRecord~ domain
-        +DomainXmlWrapper()
-        +DomainXmlWrapper(Collection~DNRecord~)
-        +getDomain() Collection~DNRecord~
-        +setDomain(Collection~DNRecord~) void
-    }
-
+%% =======================
+%% Enum
+%% =======================
     class Formats {
         <<enum>>
         JSON
@@ -178,6 +230,9 @@ classDiagram
         +containsValues(String value)$ Formats
     }
 
+%% =======================
+%% Utils
+%% =======================
     class NetUtils {
         +lookUpIp(String hostname)$ String
         +getIpDetails(String ip)$ InputStream
@@ -187,6 +242,28 @@ classDiagram
         +getUrlContents(String url)$ InputStream
     }
 
+%% =======================
+%% Relationships 
+%% =======================
+    DNInfoApp --> ArgsController
+
+    ArgsController --> DomainNameModel
+    ArgsController --> Formats
+    ArgsController --> DataFormatter
+
+    DomainNameModel <|.. DomainNameModelImpl
+
+    DomainNameModelImpl --> DNRecord
+    DomainNameModelImpl --> DomainXmlWrapper
+    DomainNameModelImpl --> NetUtils
+    DomainNameModelImpl --> IPApiBean
+
+    DomainXmlWrapper --> DNRecord
+
+    DataFormatter --> DNRecord
+    DataFormatter --> Formats
+
+    NetUtils --> IPApiBean
 ```
 
 
