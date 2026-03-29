@@ -164,15 +164,6 @@ public class Planner implements IPlanner {
         List<BoardGame> result = new ArrayList<>(currentGames);
 
 
-//        for (String raw : parts) {
-//            String cond = removeSpaces(raw);
-//            if (cond.isEmpty()) {
-//                continue;
-//            }
-//            Operation op = Operation.fromString(cond);
-//            String[] lr = splitByOperator(cond, op.token);
-//            String left = lr[0];
-//            String right = lr[1];
         for (String raw : parts) {
             String cond = raw.trim();
             if (cond.isEmpty()) {

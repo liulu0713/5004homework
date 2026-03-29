@@ -37,38 +37,6 @@ public class GameList implements IGameList {
         return games.size();
     }
 
-    @Override
-    public void saveGame(String filename) {
-        if (filename == null) {
-            throw new IllegalArgumentException("filename is null");
-        }
-        String f = filename.trim();
-        if (f.isEmpty()) {
-            throw new IllegalArgumentException("filename is empty");
-        }
-
-        // get sorted names
-        List<String> names = getGameNames();
-
-        try {
-            java.nio.file.Path path = java.nio.file.Paths.get(f);
-            java.nio.file.Path parent = path.getParent();
-
-            // create folder like "temp/" if needed
-            if (parent != null) {
-                java.nio.file.Files.createDirectories(parent);
-            }
-
-            // overwrite file (default behavior)
-            java.nio.file.Files.write(path, names,
-                    java.nio.charset.StandardCharsets.UTF_8,
-                    java.nio.file.StandardOpenOption.CREATE,
-                    java.nio.file.StandardOpenOption.TRUNCATE_EXISTING);
-
-        } catch (Exception e) {
-            throw new RuntimeException("Could not save to file:" + filename, e);
-        }
-    }
 
     /**
      * helper method to parse input strings and return a list of target games.

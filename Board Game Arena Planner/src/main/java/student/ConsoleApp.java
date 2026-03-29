@@ -219,14 +219,7 @@ public class ConsoleApp {
                         printOutput("%s %s%n", ConsoleText.INVALID_LIST, remove);
                     }
                     break;
-                case CMD_SAVE:
-                    String filename = remainder().trim();
-                    if (filename.isEmpty()) {
-                        filename = DEFAULT_FILENAME;
-                        break;
-                    }
-                    gameList.saveGame(filename);
-                    break;
+
                 case CMD_QUESTION:
                 case CMD_HELP:
                     printOutput("%s%n", ConsoleText.LIST_HELP);

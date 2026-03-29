@@ -9,9 +9,7 @@ public final class BGArenaPlanner {
     private static final String DEFAULT_COLLECTION = "/collection.csv";
 
     /** private constructor as static class. */
-    private BGArenaPlanner() {
-
-    }
+    private BGArenaPlanner() { }
 
     /**
      * Main entry point for the program.

@@ -191,7 +191,6 @@ classDiagram
         +getGameNames() List
         +clear() void
         +count() int
-        +saveGame(filename : String) void
         +addToList(str : String, filtered : Stream) void
         +removeFromList(str : String) void
     }
@@ -209,11 +208,9 @@ classDiagram
         +getGameNames() List
         +clear() void
         +count() int
-        +saveGame(filename : String) void
         +addToList(str : String, filtered : Stream) void
         +removeFromList(str : String) void
-        -resolveSelection(input : String, src : List) List
-        -sortedList(list : List) List
+        +parseInputToGames
     }
 
     class Planner {
@@ -224,18 +221,19 @@ classDiagram
         +filter(filter : String, sortOn : GameData) Stream
         +filter(filter : String, sortOn : GameData, asc : boolean) Stream
         +reset() void
-        -applyFilter(list, col, op, val) List
-        -matches(game, col, op, val) boolean
+        +splitByOperator
+        +getNumericValue
+        +compareByColumn
         -sortCurrent(col : GameData, asc : boolean) void
     }
 
     class Operation {
         <<enum>>
-        GREATER_EQ
-        LESS_EQ
+        GREATER_THAN_EQUALS
+        LESS_THAN_EQUALS
         EQUALS
         NOT_EQUALS
-        GREATER
+        GREATER_THAN
         LESS
         CONTAINS
         +token String
@@ -300,6 +298,8 @@ classDiagram
 Take time to reflect on how your design has changed. Write in *prose* (i.e. do not bullet point your answers - it matters in how our brain processes the information). Make sure to include what were some major changes, and why you made them. What did you learn from this process? What would you do differently next time? What was the most challenging part of this process? For most students, it will be a paragraph or two.
 When I began this assignment, I planned to implement the interfaces directly with minimal helper logic, 
 but I quickly realized that ordering, uniqueness, and parsing introduced many edge cases. 
+
+
 My design evolved to separate responsibilities more clearly: GameList manages a unique set of games 
 and consistent case insensitive sorting, while Planner handles progressive filtering and sorting. 
 The most challenging part was ensuring progressive filtering, 

@@ -46,18 +46,6 @@ public interface IGameList {
      */
     int count();
 
-    /**
-     * Saves the list of games to a file.
-     * 
-     * The contents of the file will be each game name on a new line. It will
-     * overwrite the file if
-     * it already exists.
-     * 
-     * Saves them in the same order as getGameNames.
-     * 
-     * @param filename The name of the file to save the list to.
-     */
-    void saveGame(String filename);
 
     /**
      * Adds a game or games to the list.
